@@ -149,6 +149,7 @@ def edit_profile(user):
 
     database.update_user(user) #update_user has not been created
     print("Your profile has been updated.")
+#need to make sure cant like user itself
 
 def like_user(user):
     user_id = int(input("Please enter the ID you like: "))
@@ -160,7 +161,7 @@ def dislike_user(user):
     user.dislike_user(user_id)
     print("User Disliked.")
 
-
+#need to make sure cant like user itself
 def view_matches(user):
     matches = []
     for liked_user_id in user.liked_users:
