@@ -115,7 +115,12 @@ def view_own_profile(user):
         print(f"Age: {user.age}")
         print(f"Gender: {user.gender}")
         print(f"Location: {user.location}")
-        print(f"Interests: {', '.join(user.interests)}")
+        
+        if isinstance(user.interests, list):
+            print(f"Interests: {', '.join(user.interests)}")
+        else:
+            print(f"Interests: {user.interests}")
+
 
         print("\nOptions:")
         print("1. Edit Profile")
@@ -145,8 +150,10 @@ def edit_profile(user):
     user.age = int(input(f"Age ({user.age}): ") or user.age)
     user.gender = input(f"Gender ({user.gender}): ") or user.gender
     user.location = input(f"Location ({user.location}): ") or user.location
-    user.interests = input(f"Interests ({', '.join(user.interests)}): ").split(',') or user.interests
-
+    if isinstance(user.interests, str):
+        user.interests = input(f"Interests ({user.interests}): ").split(',') or user.interests
+    else:
+        user.interests = input(f"Interests ({', '.join(user.interests)}): ").split(',') or user.interests
     database.update_user(user) #update_user has not been created
     print("Your profile has been updated.")
 #need to make sure cant like user itself
