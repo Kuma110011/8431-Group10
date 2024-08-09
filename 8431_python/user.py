@@ -2,6 +2,7 @@
 #Account, password: Use to log in
 # name: nick name or true name
 # user_id: unique identifer for we to see and for user to match others
+
 class User:
     def __init__(self, user_id, account, password, name, age, gender, location, interests,
                  liked_users=None, disliked_users=None, matches=None):
