@@ -21,7 +21,7 @@ def sign_up():
     age = int(input("Age: "))
     gender = input("Gender: ")
     location = input("Location: ")
-    interests = input("interests(Seperated By Text): ").split(',')
+    interests = input("interests(Separated By Text): ").split(',')
     
     existing_user = database.get_user(account)
     if existing_user:
@@ -106,6 +106,8 @@ def start_swiping(user):
                     return
                 else:
                     print("Invalid choice, please try again.")
+                    
+                    
 def view_own_profile(user):
     while True:
         print("\nYour Profile")
