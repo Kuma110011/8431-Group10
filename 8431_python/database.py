@@ -51,6 +51,6 @@ def update_user(user):
         UPDATE users
         SET name = ?, age = ?, gender = ?, location = ?, interests = ?
         WHERE username = ?
-    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), user.username))
+    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), user.user_id))
     conn.commit()
     conn.close()
