@@ -40,6 +40,16 @@ def get_user(username):
     conn.close()
     return user
 
+def get_users():
+    """Get all users from the database server"""
+    
+    conn = create_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users')
+    all_users = cursor.fetchall()
+    conn.close()
+    return all_users
+
 def delete_user(user_id):
     conn = create_connection()
     cursor = conn.cursor()
@@ -48,7 +58,7 @@ def delete_user(user_id):
     
     cursor.execute('SELECT * FROM users')
     all_users = cursor.fetchall()
-    
+
     for user_data in all_users:
         current_user_id, name, age, gender, location, interests, liked_users, disliked_users, matches = user_data
         
