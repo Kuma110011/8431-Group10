@@ -21,6 +21,7 @@ class User:
 
    # when print itself
     def __repr__(self):
+        #TODO: need to make it more readable
         return (f'User({self.user_id}, {self.account}, {self.name}, {self.age}, {self.gender}, {self.location}, {self.interests},' 
             f'{self.liked_users}, {self.disliked_users}, {self.matches})')
 

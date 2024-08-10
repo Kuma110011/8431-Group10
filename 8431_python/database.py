@@ -9,6 +9,11 @@ def create_connection():
 def create_tables():
     conn = create_connection()
     cursor = conn.cursor()
+    
+    # Drop the existing table if it exists
+    # cursor.execute('DROP TABLE IF EXISTS users')
+    
+    # Create the table
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                         user_id INTEGER PRIMARY KEY AUTOINCREMENT,
                         username TEXT UNIQUE NOT NULL,
@@ -27,6 +32,9 @@ def create_tables():
 def add_user(username, password, name, age, gender, location, interests):
     conn = create_connection()
     cursor = conn.cursor()
+    
+    #TODO: fix problem with table output of only one interest
+    
     cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests)
                       VALUES (?, ?, ?, ?, ?, ?, ?)''', (username, password, name, age, gender, location, ','.join(interests)))
     conn.commit()
@@ -93,10 +101,19 @@ def delete_user(user_id):
 def update_user(user):
     conn = create_connection()
     cursor = conn.cursor()
+    
+    liked_users = ','.join(map(str, user.liked_users))
+    disliked_users = ','.join(map(str, user.disliked_users))
+    matches = ','.join(map(str, user.matches))
+    
+    #TODO: fix problem with table output of only one interest
+    
     cursor.execute("""
         UPDATE users
-        SET name = ?, age = ?, gender = ?, location = ?, interests = ?
-        WHERE username = ?
-    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), user.user_id))
+        SET name = ?, age = ?, gender = ?, location = ?, interests = ?,  liked_users = ?, disliked_users = ?, matches = ?
+        WHERE user_id = ?
+    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), liked_users, 
+          disliked_users, matches, user.user_id))
     conn.commit()
     conn.close()
+    

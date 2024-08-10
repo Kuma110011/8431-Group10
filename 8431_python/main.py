@@ -18,7 +18,7 @@ def sign_up():
     password = input("Password: ")
     name = input("UserName: ")
     #usr id is our id, also unique id
-    age = int(input("Age: "))
+    age = int(input("Age: ")) ## need to check whether is digit
     gender = input("Gender: ")
     location = input("Location: ")
     interests = input("interests(Separated By Text): ").split(',')
@@ -93,19 +93,24 @@ def start_swiping(user):
     for other_user_data in all_users:
         other_user = User(*other_user_data)
         if other_user.user_id != user.user_id:
-            print(other_user)
+            print(other_user) 
             while True:
                 action = input("Do you want to like (l), dislike (d), or exit (e)? ")
                 if action == 'l':
-                    like_user(user, other_user.user_id)
+                    # like_user(user, other_user.user_id)
+                    user.like(other_user)
+                    database.update_user(user)
                     break
                 elif action == 'd':
-                    dislike_user(user, other_user.user_id)
+                    # dislike_user(user, other_user.user_id)
+                    user.dislike(other_user)
+                    database.update_user(user)
                     break
                 elif action == 'e':
                     return
                 else:
                     print("Invalid choice, please try again.")
+            
                     
                     
 def view_own_profile(user):
@@ -122,7 +127,10 @@ def view_own_profile(user):
             print(f"Interests: {', '.join(user.interests)}")
         else:
             print(f"Interests: {user.interests}")
-
+        
+        print(f"Liked users: {user.liked_users}")
+        print(f"Disliked users: {user.disliked_users}")
+        print(f"Matches: {user.matches}")
 
         print("\nOptions:")
         print("1. Edit Profile")
@@ -160,12 +168,12 @@ def edit_profile(user):
     print("Your profile has been updated.")
 #need to make sure cant like user itself
 
-def like_user(user):
+def like_user(user): # we dont need this function?
     user_id = int(input("Please enter the ID you like: "))
     user.like_user(user_id)
     print("User Liked.")
 
-def dislike_user(user):
+def dislike_user(user): # we dont need this function?
     user_id = int(input("Please enter the ID you dislike: "))
     user.dislike_user(user_id)
     print("User Disliked.")
@@ -174,7 +182,7 @@ def dislike_user(user):
 def view_matches(user):
     matches = []
     for liked_user_id in user.liked_users:
-        other_user_data = database.get_user_by_id(liked_user_id)
+        other_user_data = database.get_user(liked_user_id)
         if other_user_data:
             other_user = User(*other_user_data)
             if user.user_id in other_user.liked_users:
