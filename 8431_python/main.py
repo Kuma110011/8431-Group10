@@ -5,6 +5,8 @@ import time
 import sys
 from user import User
 import database
+from datetime import datetime
+import calendar
 #123
 def welcome():
     print("welcome to tinderlink!")
@@ -12,13 +14,51 @@ def welcome():
     print("2.Sign Up")
     print("3.Exit")
 
+
+def get_valid_int_input(prompt, min, max):
+    """Helper function to get a valid integer input within specific value constraints."""
+    while True:
+        try:
+            value = int(input(prompt))
+            if min <= value <= max:
+                return value
+            else:
+                print("Please enter a valid date.")
+        except ValueError:
+            print("Please enter a valid integer.")
+
+
+def get_user_dob():
+    """A function that asks the user for the year, month, and day of birth."""
+    today = datetime.today()
+    year = get_valid_int_input("Your year of birth (e.g., 1990): ", 1000, today.year)
+    month = get_valid_int_input("Your month of birth (e.g., 8 for August): ", 1, 12)
+
+    days_in_month = calendar.monthrange(year, month)
+    day = get_valid_int_input("Your day of birth (e.g., 10): ", 1, days_in_month[1])
+
+    dob = datetime(year, month, day)
+    return dob
+
+
+def calculate_age(dob):
+    """a function uses date of birth to get the current age"""
+    today = datetime.today()
+    age = today.year - dob.year
+
+    if (today.month, today.day) < (dob.month, dob.day):
+        age -= 1
+    return age
+
+
+
 def sign_up():
     print("Sign Up")
     account = input("Account: ")
     password = input("Password: ")
     name = input("UserName: ")
     #usr id is our id, also unique id
-    age = int(input("Age: ")) ## need to check whether is digit
+    age = calculate_age(get_user_dob())
     gender = input("Gender: ")
     location = input("Location: ")
     interests = input("interests(Separated By Text): ").split(',')
