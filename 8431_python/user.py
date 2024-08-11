@@ -14,10 +14,21 @@ class User:
         self.age = age
         self.gender = gender
         self.location = location
-        self.interests = interests
-        self.liked_users = liked_users if liked_users is not None else []
-        self.disliked_users = disliked_users if disliked_users is not None else []
-        self.matches = matches if matches is not None else []
+        
+        # Convert string to list of correct data type if needed
+        self.interests = self._convert_to_list(interests, str)
+        
+        # Create liked_users, disliked_users, and matches list
+        self.liked_users = self._convert_to_list(liked_users, int)
+        self.disliked_users = self._convert_to_list(disliked_users, int)
+        self.matches = self._convert_to_list(matches, int)
+
+
+    def _convert_to_list(self, attr, data_type):
+        """Helper method to convert a comma-separated string to a list of integers"""
+        if isinstance(attr, str):
+            return list(map(data_type, attr.split(','))) if attr else []
+        return attr if attr is not None else []
 
    # when print itself
     def __repr__(self):
@@ -25,10 +36,10 @@ class User:
         return (f'User({self.user_id}, {self.account}, {self.name}, {self.age}, {self.gender}, {self.location}, {self.interests},' 
             f'{self.liked_users}, {self.disliked_users}, {self.matches})')
 
-
     def like(self, other_user):
         if other_user.user_id not in self.liked_users:
             self.liked_users.append(other_user.user_id)
+        #TODO: TypeError here, seems like in somewhere when user.liked_users became string
         if self.user_id in other_user.liked_users and other_user.user_id not in self.matches:
             self.matches.append(other_user.user_id)
             other_user.matches.append(self.user_id)

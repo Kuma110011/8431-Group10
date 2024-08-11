@@ -41,7 +41,7 @@ def sign_in():
     user_data = database.get_user(account)
     if user_data and user_data[2] == password:  # user_data[2] is password
         print(f"Welcome, {user_data[3]}!")  # user_data[3] is name
-        return User(*user_data)
+        return User(*user_data) # return an User object given the user_data
     else:
         print("Wrong Account or Password.")
         return None
