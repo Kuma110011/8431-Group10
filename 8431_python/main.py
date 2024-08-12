@@ -187,7 +187,6 @@ def semantic_similarity(text1, text2):
     # 余弦相似度矩阵是对称的，所以 [0, 1] 或 [1, 0] 都是 text1 和 text2 之间的相似度
     return similarity_matrix[0, 1]
 
-
 def start_swiping(current_user):
     all_users = database.get_all_users()
     all_users = [User(*user_data) for user_data in all_users if user_data[0] != current_user.user_id]
@@ -201,13 +200,20 @@ def start_swiping(current_user):
         if action == "yes":
             current_user.like(recommended_user)
             database.update_user(current_user)
+            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
         elif action == "no":
             current_user.dislike(recommended_user)
             database.update_user(current_user)
+            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
         elif action == "exit":
             break
         else:
             print("Invalid input. Please enter 'yes', 'no', or 'exit'.")
+
+        # 检查是否还有可推荐的用户
+        if not all_users:
+            print("No more users to recommend.")
+            break
             
                     
                     
