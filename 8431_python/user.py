@@ -26,7 +26,8 @@ class User:
         # Initialize attribute weights
         self.attribute_weights = {
             'age': 1.0,
-            'gender': 1.0,
+            'gender_Male': 1.0,
+            'gender_Female': 1.0,
             'location': 1.0,
             'introduction': 1.0
         }

@@ -135,8 +135,12 @@ def user_menu(user):
         else:
             print("Invalid choice, please try again.")
 
-
 def recommend(current_user, all_users):
+    # Step 1: Exclude already liked and disliked users
+    excluded_users = set(current_user.liked_users + current_user.disliked_users)
+    available_users = [user for user in all_users if user.user_id not in excluded_users and user.user_id != 1]
+
+    # Step 2: Choose an attribute based on weights
     total_weight = sum(current_user.attribute_weights.values())
     chosen_attr = random.choices(
         population=list(current_user.attribute_weights.keys()),
@@ -144,18 +148,45 @@ def recommend(current_user, all_users):
         k=1
     )[0]
 
-    # Filter out the administrator (user_id = 1) from all_users
-    all_users = [user for user in all_users if user.user_id != 1]
-    
-    if chosen_attr in ['age', 'gender', 'location']:
-        candidates = [user for user in all_users if getattr(user, chosen_attr) == getattr(current_user, chosen_attr)]
+    # Step 3: Filter candidates based on chosen attribute
+    if chosen_attr == 'age':
+        candidates = [user for user in available_users 
+                      if abs(user.age - current_user.age) <= 5]
+    elif chosen_attr == 'gender_Male':
+        candidates = [user for user in available_users if user.gender == 'Male']
+    elif chosen_attr == 'gender_Female':
+        candidates = [user for user in available_users if user.gender == 'Female']
+    elif chosen_attr == 'location':
+        candidates = [user for user in available_users if user.location == current_user.location]
+    elif chosen_attr == 'introduction':
+        # Implementing a basic semantic approximation for the introduction (using placeholder logic)
+        candidates = sorted(available_users, key=lambda user: semantic_similarity(current_user.introduction, user.introduction), reverse=True)
+        candidates = candidates[:10]  # Keep top 10 similar introductions
     else:
-        candidates = [user for user in all_users if chosen_attr in user.interests]
+        candidates = [user for user in available_users if chosen_attr in user.interests]
 
+    # Step 4: Return a random candidate or a random user if no candidates found
     if candidates:
         return random.choice(candidates)
     else:
-        return random.choice(all_users)
+        return random.choice(available_users)
+        
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+def semantic_similarity(text1, text2):
+    # 将两个文本放入列表中
+    texts = [text1, text2]
+    
+    # 使用 TfidfVectorizer 将文本转化为 TF-IDF 矩阵
+    vectorizer = TfidfVectorizer().fit_transform(texts)
+    
+    # 计算余弦相似度
+    similarity_matrix = cosine_similarity(vectorizer)
+    
+    # 余弦相似度矩阵是对称的，所以 [0, 1] 或 [1, 0] 都是 text1 和 text2 之间的相似度
+    return similarity_matrix[0, 1]
+
 
 def start_swiping(current_user):
     all_users = database.get_all_users()
