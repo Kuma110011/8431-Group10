@@ -155,7 +155,7 @@ def recommend(current_user, all_users):
 
 def start_swiping(current_user):
     all_users = database.get_all_users()
-    all_users = [user for user in all_users if user.user_id != current_user.user_id]
+    all_users = [User(*user_data) for user_data in all_users if user_data[0] != current_user.user_id]
 
     while True:
         recommended_user = recommend(current_user, all_users)

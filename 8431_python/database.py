@@ -48,7 +48,7 @@ def get_user(username):
     conn.close()
     return user
 
-def get_users():
+def get_all_users():
     """Get all users from the database server"""
     
     conn = create_connection()
