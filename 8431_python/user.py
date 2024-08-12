@@ -26,9 +26,13 @@ class User:
             'gender_Male': 1.0,
             'gender_Female': 1.0,
             'location': 1.0,
-            'introduction': 1.0,
+            'introduction': 1.0}
             # You can add other attributes as needed
-        }
+        for interest in self.interests:
+            self.attribute_weights[interest] = 1.0
+
+
+        
 
     def _convert_to_list(self, attr, data_type):
         """Helper method to convert a comma-separated string to a list of integers"""
