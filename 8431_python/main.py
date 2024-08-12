@@ -7,6 +7,7 @@ from user import User
 import database
 from datetime import datetime
 import calendar
+import random
 #123
 def welcome():
     print("welcome to tinderlink!")
@@ -128,28 +129,44 @@ def user_menu(user):
             print("Invalid choice, please try again.")
 
 
-def start_swiping(user):
-    all_users = database.get_users()# this thing needs alogrithm
-    for other_user_data in all_users:
-        other_user = User(*other_user_data)
-        if other_user.user_id != user.user_id:
-            print(other_user) 
-            while True:
-                action = input("Do you want to like (l), dislike (d), or exit (e)? ")
-                if action == 'l':
-                    # like_user(user, other_user.user_id)
-                    user.like(other_user)
-                    database.update_user(user)
-                    break
-                elif action == 'd':
-                    # dislike_user(user, other_user.user_id)
-                    user.dislike(other_user)
-                    database.update_user(user)
-                    break
-                elif action == 'e':
-                    return
-                else:
-                    print("Invalid choice, please try again.")
+def recommend(current_user, all_users):
+    total_weight = sum(current_user.attribute_weights.values())
+    chosen_attr = random.choices(
+        population=list(current_user.attribute_weights.keys()),
+        weights=list(current_user.attribute_weights.values()),
+        k=1
+    )[0]
+
+    if chosen_attr in ['age', 'gender', 'location']:
+        candidates = [user for user in all_users if getattr(user, chosen_attr) == getattr(current_user, chosen_attr)]
+    else:
+        candidates = [user for user in all_users if chosen_attr in user.interests]
+
+    if candidates:
+        return random.choice(candidates)
+    else:
+        return random.choice(all_users)
+
+def start_swiping(current_user):
+    all_users = database.get_all_users()
+    all_users = [user for user in all_users if user.user_id != current_user.user_id]
+
+    while True:
+        recommended_user = recommend(current_user, all_users)
+
+        print(f"\nRecommended User: {recommended_user}")
+        action = input("Do you like this user? (yes/no/exit): ").lower()
+
+        if action == "yes":
+            current_user.like(recommended_user)
+            database.update_user(current_user)
+        elif action == "no":
+            current_user.dislike(recommended_user)
+            database.update_user(current_user)
+        elif action == "exit":
+            break
+        else:
+            print("Invalid input. Please enter 'yes', 'no', or 'exit'.")
             
                     
                     
