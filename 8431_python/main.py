@@ -62,6 +62,7 @@ def sign_up():
     age = calculate_age(get_user_dob())
     gender = input("Gender: ")
     location = input("Location: ")
+    
     # Display predefined interests
     print("Select your interests from the following options (separated by commas):")
     print("""
@@ -69,7 +70,7 @@ def sign_up():
     Football, Gym, Sports, Music, Films, Working Out, Tattoos, Outdoors, Nightlife
     """)
     interests = input("interests(Separated By Text): ").split(',')
-    
+    introduction = input("Introduction: ")
     existing_user = database.get_user(account)
     if existing_user:
         print("Already exist, please sign in")

@@ -4,7 +4,7 @@
 # user_id: unique identifer for we to see and for user to match others
 
 class User:
-    def __init__(self, user_id, account, password, name, age, gender, location, interests,
+    def __init__(self, user_id, account, password, name, age, gender, location, interests,introduction,
                  liked_users=None, disliked_users=None, matches=None, attribute_weights=None):
         # this user_ id unique id
         self.user_id = user_id
@@ -14,7 +14,7 @@ class User:
         self.age = age
         self.gender = gender
         self.location = location
-        
+        self.introduction = introduction
         # Convert string to list of correct data type if needed
         self.interests = self._convert_to_list(interests, str)
         
@@ -27,7 +27,8 @@ class User:
         self.attribute_weights = {
             'age': 1.0,
             'gender': 1.0,
-            'location': 1.0
+            'location': 1.0,
+            'introduction': 1.0
         }
         for interest in self.interests:
             self.attribute_weights[interest] = 1.0
