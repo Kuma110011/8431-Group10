@@ -52,6 +52,13 @@ class User:
             other_user.matches.append(self.user_id)
         self.update_weight(other_user, 1.1)
 
+    def dislike(self, other_user):
+        if other_user.user_id not in self.disliked_users:
+            self.disliked_users.append(other_user.user_id)
+
+        self.update_weight(other_user, 0.9)
+
+
     def update_weight(self, other_user, factor):
         """Update the weight of the matched attribute."""
         for attr, weight in self.attribute_weights.items():
