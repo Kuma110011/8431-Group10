@@ -1,3 +1,5 @@
+# database.py
+
 import sqlite3
 
 def create_connection():
@@ -48,7 +50,7 @@ def get_user_by_id(user_id):
     conn.close()
     return user
 
-def get_all_users():
+def get_users():
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users')
@@ -95,7 +97,6 @@ def update_user(user):
     conn = create_connection()
     cursor = conn.cursor()
 
-    # Ensure there are no empty strings in the lists before joining
     liked_users = ','.join(filter(None, map(str, user.liked_users)))
     disliked_users = ','.join(filter(None, map(str, user.disliked_users)))
     matches = ','.join(filter(None, map(str, user.matches)))
