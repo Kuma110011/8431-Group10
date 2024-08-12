@@ -153,9 +153,9 @@ def recommend(current_user, all_users):
         candidates = [user for user in available_users 
                       if abs(user.age - current_user.age) <= 5]
     elif chosen_attr == 'gender_Male':
-        candidates = [user for user in available_users if user.gender == 'Male']
+        candidates = [user for user in available_users if user.gender.tolower == 'male']
     elif chosen_attr == 'gender_Female':
-        candidates = [user for user in available_users if user.gender == 'Female']
+        candidates = [user for user in available_users if user.gender.tolower == 'female']
     elif chosen_attr == 'location':
         candidates = [user for user in available_users if user.location == current_user.location]
     elif chosen_attr == 'introduction':

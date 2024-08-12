@@ -64,7 +64,7 @@ class User:
     def update_weight(self, other_user, factor):
         """Update the weight of the matched attribute."""
         for attr, weight in self.attribute_weights.items():
-            if attr in ['age', 'gender', 'location']:
+            if attr in ['age', 'gender_Male','gender_Female', 'location','introduction']:
                 if getattr(self, attr) == getattr(other_user, attr):
                     self.attribute_weights[attr] *= factor
             elif attr in self.interests and attr in other_user.interests:
