@@ -155,7 +155,11 @@ def recommend(current_user, all_users):
     if candidates:
         return random.choice(candidates)
     else:
-        return random.choice(available_users)
+        if available_users == []:
+            print("No more users for recommendation")
+            return None
+        else:
+            return random.choice(available_users)
         
 def semantic_similarity(text1, text2):
     texts = [text1, text2]
@@ -164,13 +168,17 @@ def semantic_similarity(text1, text2):
     return similarity_matrix[0, 1]
 
 def start_swiping(current_user):
-    all_users = database.get_users()
+    all_users = database.get_all_users()
     all_users = [User(*user_data) for user_data in all_users if user_data[0] != current_user.user_id]
-
+   
     while True:
+
         recommended_user = recommend(current_user, all_users)
 
         print(f"\nRecommended User: {recommended_user}")
+        if recommended_user is None:
+            return
+        
         action = input("Do you like this user? (yes/no/exit): ").lower()
 
         if action == "yes":
@@ -236,7 +244,6 @@ def view_own_profile(user):
 def edit_profile(user):
     print("\nEdit Profile")
     user.name = input(f"Name ({user.name}): ") or user.name
-    user.age = int(input(f"Age ({user.age}): ") or user.age)
     user.gender = input(f"Gender ({user.gender}): ") or user.gender
     user.location = input(f"Location ({user.location}): ") or user.location
     if isinstance(user.interests, str):
