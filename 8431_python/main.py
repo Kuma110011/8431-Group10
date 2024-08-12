@@ -143,6 +143,9 @@ def recommend(current_user, all_users):
         k=1
     )[0]
 
+    # Filter out the administrator (user_id = 1) from all_users
+    all_users = [user for user in all_users if user.user_id != 1]
+    
     if chosen_attr in ['age', 'gender', 'location']:
         candidates = [user for user in all_users if getattr(user, chosen_attr) == getattr(current_user, chosen_attr)]
     else:
