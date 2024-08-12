@@ -1,5 +1,3 @@
-# database.py
-
 import sqlite3
 
 def create_connection():
@@ -19,18 +17,22 @@ def create_tables():
                         gender TEXT,
                         location TEXT,
                         interests TEXT,
+                        introduction TEXT,
                         liked_users TEXT,
                         disliked_users TEXT,
                         matches TEXT)''')
     conn.commit()
     conn.close()
 
-def add_user(username, password, name, age, gender, location, interests):
+
+
+def add_user(username, password, name, age, gender, location, interests, introduction):
     conn = create_connection()
     cursor = conn.cursor()
     
-    cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests)
-                      VALUES (?, ?, ?, ?, ?, ?, ?)''', (username, password, name, age, gender, location, ','.join(interests)))
+    cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests, introduction)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
+                   (username, password, name, age, gender, location, ','.join(interests), introduction))
     conn.commit()
     conn.close()
 
@@ -50,7 +52,7 @@ def get_user_by_id(user_id):
     conn.close()
     return user
 
-def get_users():
+def get_all_users():
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users')
@@ -66,7 +68,7 @@ def delete_user(user_id):
     all_users = cursor.fetchall()
 
     for user_data in all_users:
-        current_user_id, username, password, name, age, gender, location, interests, liked_users, disliked_users, matches = user_data
+        current_user_id, username, password, name, age, gender, location, interests, introduction, liked_users, disliked_users, matches = user_data
         
         liked_users_list = list(map(int, liked_users.split(','))) if liked_users else []
         disliked_users_list = list(map(int, disliked_users.split(','))) if disliked_users else []
@@ -97,15 +99,16 @@ def update_user(user):
     conn = create_connection()
     cursor = conn.cursor()
 
+    # Ensure there are no empty strings in the lists before joining
     liked_users = ','.join(filter(None, map(str, user.liked_users)))
     disliked_users = ','.join(filter(None, map(str, user.disliked_users)))
     matches = ','.join(filter(None, map(str, user.matches)))
 
     cursor.execute("""
         UPDATE users
-        SET name = ?, age = ?, gender = ?, location = ?, interests = ?, liked_users = ?, disliked_users = ?, matches = ?
+        SET name = ?, age = ?, gender = ?, location = ?, interests = ?, introduction = ?, liked_users = ?, disliked_users = ?, matches = ?
         WHERE user_id = ?
-    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), liked_users, 
+    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests),user.introduction, liked_users, 
           disliked_users, matches, user.user_id))
     conn.commit()
     conn.close()

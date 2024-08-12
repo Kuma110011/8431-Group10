@@ -1,8 +1,8 @@
 # user.py
 
 class User:
-    def __init__(self, user_id, account, password, name, age, gender, location, interests,
-                 liked_users=None, disliked_users=None, matches=None):
+    def __init__(self, user_id, account, password, name, age, gender, location, interests,introduction,
+                 liked_users=None, disliked_users=None, matches=None,attribute_weights = None):
         self.user_id = user_id
         self.account = account
         self.password = password
@@ -10,6 +10,7 @@ class User:
         self.age = age
         self.gender = gender
         self.location = location
+        self.introduction = introduction
         
         # Convert string to list of correct data type if needed
         self.interests = self._convert_to_list(interests, str)

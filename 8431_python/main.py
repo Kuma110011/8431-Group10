@@ -71,7 +71,7 @@ def sign_up():
         print("Already exist, please sign in")
         return
 
-    database.add_user(account, password, name, age, gender, location, interests)
+    database.add_user(account, password, name, age, gender, location, interests,introduction)
     print("You are registered, this will be automatically close and please sign in")
     time.sleep(2)
 
@@ -185,7 +185,10 @@ def start_swiping(current_user):
             break
         else:
             print("Invalid input. Please enter 'yes', 'no', or 'exit'.")
-            
+
+        if not all_users:
+            print('No more users to recommend.')
+            break  
                     
                     
 def view_own_profile(user):
@@ -202,6 +205,7 @@ def view_own_profile(user):
             print(f"Interests: {', '.join(user.interests)}")
         else:
             print(f"Interests: {user.interests}")
+        print(f"introduction: {user.introduction}")
         
         print(f"Liked users: {user.liked_users}")
         print(f"Disliked users: {user.disliked_users}")
@@ -239,6 +243,7 @@ def edit_profile(user):
         user.interests = input(f"Interests ({user.interests}): ").split(',') or user.interests
     else:
         user.interests = input(f"Interests ({', '.join(user.interests)}): ").split(',') or user.interests
+    user.introduction = input(f"introduction ({user.introduction}): ") or user.introduction
     database.update_user(user)
     print("Your profile has been updated.")
 
