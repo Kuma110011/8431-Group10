@@ -176,13 +176,17 @@ def start_swiping(current_user):
         if action == "yes":
             current_user.like(recommended_user)
             database.update_user(current_user)
+            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
         elif action == "no":
             current_user.dislike(recommended_user)
             database.update_user(current_user)
+            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
         elif action == "exit":
             break
         else:
             print("Invalid input. Please enter 'yes', 'no', or 'exit'.")
+            
+                    
                     
 def view_own_profile(user):
     while True:
