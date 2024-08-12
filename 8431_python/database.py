@@ -48,7 +48,7 @@ def get_user_by_id(user_id):
     conn.close()
     return user
 
-def get_users():
+def get_all_users():
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users')

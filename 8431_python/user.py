@@ -5,7 +5,7 @@
 
 class User:
     def __init__(self, user_id, account, password, name, age, gender, location, interests,
-                 liked_users=None, disliked_users=None, matches=None):
+                 liked_users=None, disliked_users=None, matches=None, attribute_weights=None):
         # this user_ id unique id
         self.user_id = user_id
         self.account = account
@@ -34,10 +34,9 @@ class User:
 
 
     def _convert_to_list(self, attr, data_type):
-        """Helper method to convert a comma-separated string to a list of integers"""
-        if isinstance(attr, str):
-            return list(map(data_type, attr.split(','))) if attr else []
-        return attr if attr is not None else []
+        # Filter out any empty strings before converting to the desired data type
+        return list(map(data_type, filter(None, attr.split(',')))) if attr else []
+
 
    # when print itself
     def __repr__(self):
