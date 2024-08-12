@@ -1,4 +1,5 @@
 import sqlite3
+import json
 
 def create_connection():
     conn = sqlite3.connect('matching_app.db')
@@ -20,7 +21,8 @@ def create_tables():
                         introduction TEXT,
                         liked_users TEXT,
                         disliked_users TEXT,
-                        matches TEXT)''')
+                        matches TEXT,
+                        attribute_weights TEXT)''')
     conn.commit()
     conn.close()
 
@@ -106,9 +108,9 @@ def update_user(user):
 
     cursor.execute("""
         UPDATE users
-        SET name = ?, age = ?, gender = ?, location = ?, interests = ?, introduction = ?, liked_users = ?, disliked_users = ?, matches = ?
+        SET name = ?, age = ?, gender = ?, location = ?, interests = ?, introduction = ?, liked_users = ?, disliked_users = ?, matches = ?, attribute_weights = ?
         WHERE user_id = ?
     """, (user.name, user.age, user.gender, user.location, ','.join(user.interests),user.introduction, liked_users, 
-          disliked_users, matches, user.user_id))
+          disliked_users, matches, user.attribute_weights, user.user_id))
     conn.commit()
     conn.close()
