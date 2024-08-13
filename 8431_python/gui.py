@@ -253,10 +253,6 @@ class TinderLinkApp:
         name_entry.insert(0, self.user.name)
         name_entry.pack()
 
-        Label(self.root, text="Age").pack(pady=5)
-        age_entry = Entry(self.root)
-        age_entry.insert(0, self.user.age)
-        age_entry.pack()
 
         Label(self.root, text="Gender").pack(pady=5)
         gender_entry = Entry(self.root)
