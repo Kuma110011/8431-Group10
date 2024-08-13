@@ -9,6 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import json
 from user import User
 import database
+from main import recommend
 
 class TinderLinkApp:
     def __init__(self, root):
@@ -147,12 +148,8 @@ class TinderLinkApp:
     def start_swiping(self):
         self.skipped_users = []
 
-        all_users = [
-            user for user in database.get_all_users()
-            if user.user_id != self.user.user_id and
-            user.user_id not in self.user.liked_users and
-            user.user_id not in self.user.disliked_users
-        ]
+        all_users = database.get_all_users()
+        all_users = [user for user in all_users if user.user_id != self.user.user_id]  # list of User objects
 
         if not all_users:
             self.no_more_users()
@@ -163,63 +160,58 @@ class TinderLinkApp:
 
         self.swipe_index = 0
         self.all_users = all_users
-        self.show_next_user()
+        self.show_next_user_swiping()
 
-    def show_next_user(self):
-        if self.swipe_index >= len(self.all_users):
+    def show_next_user_swiping(self):
+        if not self.all_users:
             self.swipe_window.destroy()
             self.no_more_users()
             return
 
-        other_user_data = self.all_users[self.swipe_index]
+        recommended_user, chosen_attr = recommend(self.user, self.all_users)
 
-        # Check if `other_user_data` is already a `User` object
-        if isinstance(other_user_data, User):
-            other_user = other_user_data
-        else:
-            other_user = User(*other_user_data)
+        if recommended_user is None:
+            self.swipe_window.destroy()
+            self.no_more_users()
+            return
 
         self.clear_swipe_window()
 
         Label(self.swipe_window, text="User Profile", font=('Arial', 24)).pack(pady=10)
-        Label(self.swipe_window, text=f"Name: {other_user.name}").pack(pady=5)
-        Label(self.swipe_window, text=f"Age: {other_user.age}").pack(pady=5)
-        Label(self.swipe_window, text=f"Gender: {other_user.gender}").pack(pady=5)
-        Label(self.swipe_window, text=f"Location: {other_user.location}").pack(pady=5)
+        Label(self.swipe_window, text=f"Name: {recommended_user.name}").pack(pady=5)
+        Label(self.swipe_window, text=f"Age: {recommended_user.age}").pack(pady=5)
+        Label(self.swipe_window, text=f"Gender: {recommended_user.gender}").pack(pady=5)
+        Label(self.swipe_window, text=f"Location: {recommended_user.location}").pack(pady=5)
 
-        interests_display = ', '.join(other_user.interests) if isinstance(other_user.interests, list) else other_user.interests
+        interests_display = ', '.join(recommended_user.interests) if isinstance(recommended_user.interests, list) else recommended_user.interests
         Label(self.swipe_window, text=f"Interests: {interests_display}").pack(pady=5)
 
-        like_button = Button(self.swipe_window, text="Like", command=lambda u_id=other_user.user_id: self.like_user_and_continue(u_id))
-        like_button.pack(side="left", padx=20, pady=10)
+        def like_user_action():
+            self.user.like(recommended_user, chosen_attr)
+            database.update_user(self.user)
+            self.all_users.remove(recommended_user)
+            self.show_next_user_swiping()
 
-        dislike_button = Button(self.swipe_window, text="Dislike", command=lambda u_id=other_user.user_id: self.dislike_user_and_continue(u_id))
-        dislike_button.pack(side="left", padx=20, pady=10)
+        def dislike_user_action():
+            self.user.dislike(recommended_user, chosen_attr)
+            database.update_user(self.user)
+            self.all_users.remove(recommended_user)
+            self.show_next_user_swiping()
 
-        skip_button = Button(self.swipe_window, text="Skip", command=self.skip_user_and_continue)
-        skip_button.pack(side="left", padx=20, pady=10)
+        Button(self.swipe_window, text="Like", command=like_user_action).pack(side="left", padx=20, pady=10)
+        Button(self.swipe_window, text="Dislike", command=dislike_user_action).pack(side="left", padx=20, pady=10)
 
-        close_button = Button(self.swipe_window, text="X", command=self.close_swiping)
-        close_button.place(relx=1.0, rely=0.0, anchor="ne")
+        Button(self.swipe_window, text="Skip", command=self.skip_user_and_continue).pack(side="left", padx=20, pady=10)
+        Button(self.swipe_window, text="X", command=self.close_swiping).place(relx=1.0, rely=0.0, anchor="ne")
 
     def close_swiping(self):
         self.swipe_window.destroy()
         self.create_user_menu()
 
-    def like_user_and_continue(self, user_id):
-        self.like_user(user_id)
-        self.all_users.pop(self.swipe_index)
-        self.show_next_user()
-
-    def dislike_user_and_continue(self, user_id):
-        self.dislike_user(user_id)
-        self.all_users.pop(self.swipe_index)
-        self.show_next_user()
-
     def skip_user_and_continue(self):
         self.skipped_users.append(self.all_users[self.swipe_index])
         self.swipe_index += 1
-        self.show_next_user()
+        self.show_next_user_swiping()
 
     def no_more_users(self):
         no_users_window = Toplevel(self.root)
@@ -303,43 +295,32 @@ class TinderLinkApp:
     def delete_profile(self):
         confirm = messagebox.askyesno("Confirm", "Are you sure you want to delete your profile?")
         if confirm:
-        # Fetch all users from the database
             all_users = database.get_all_users()
 
-        # Iterate through each user to remove the deleted user's ID from their lists
-        for user_data in all_users:
-            if isinstance(user_data, User):
-                other_user = user_data
-            else:
-                # Only unpack the first 12 fields
-                other_user = User(*user_data[:12])
+            for user_data in all_users:
+                if isinstance(user_data, User):
+                    other_user = user_data
+                else:
+                    other_user = User(*user_data[:12])
 
-            # Remove this user's ID from the other user's liked, disliked, and matches lists
-            if self.user.user_id in other_user.liked_users:
-                other_user.liked_users.remove(self.user.user_id)
-            if self.user.user_id in other_user.disliked_users:
-                other_user.disliked_users.remove(self.user.user_id)
-            if self.user.user_id in other_user.matches:
-                other_user.matches.remove(self.user.user_id)
+                if self.user.user_id in other_user.liked_users:
+                    other_user.liked_users.remove(self.user.user_id)
+                if self.user.user_id in other_user.disliked_users:
+                    other_user.disliked_users.remove(self.user.user_id)
+                if self.user.user_id in other_user.matches:
+                    other_user.matches.remove(self.user.user_id)
 
-            # Update the other user's data in the database
-            database.update_user(other_user)
+                database.update_user(other_user)
 
-        # Finally, delete the user from the database
-        database.delete_user(self.user.user_id)
+            database.delete_user(self.user.user_id)
 
-        # Inform the user that their profile has been deleted
-        messagebox.showinfo("Deleted", "Your profile has been deleted.")
+            messagebox.showinfo("Deleted", "Your profile has been deleted.")
 
-        # Go back to the very original login screen
-        self.create_login_screen()
-
-
+            self.create_login_screen()
 
     def view_matches(self):
         self.clear_screen()
 
-        # Ensure self.user.matches is a list of integers
         if isinstance(self.user.matches, str):
             self.user.matches = [int(uid) for uid in self.user.matches.split(',') if uid.isdigit()]
 
@@ -347,20 +328,17 @@ class TinderLinkApp:
         for liked_user_id in self.user.liked_users:
             other_user_data = database.get_user_by_id(liked_user_id)
 
-            # Check if the returned data is already a User object
             if isinstance(other_user_data, User):
-                other_user = other_user_data  # Use it directly
+                other_user = other_user_data
             elif isinstance(other_user_data, (tuple, list)):
-                other_user = User(*other_user_data)  # Unpack and create User object
+                other_user = User(*other_user_data)
             else:
-                # Log an error or handle unexpected data types
                 print(f"Unexpected data type for user: {type(other_user_data)}")
                 continue
 
             if self.user.user_id in other_user.liked_users:
                 matches.append(other_user)
 
-                # Ensure mutual match is updated
                 if self.user.user_id not in other_user.matches:
                     other_user.matches.append(self.user.user_id)
                     other_user.matches = ','.join(map(str, other_user.matches))
@@ -416,7 +394,10 @@ class TinderLinkApp:
 
             liked_user_data = database.get_user_by_id(other_user_id)
 
-            # Check if `liked_user_data` is already a `User` object
+            if liked_user_data is None:
+                print(f"Unexpected data type for user: {liked_user_data}")
+                return
+
             if isinstance(liked_user_data, User):
                 liked_user = liked_user_data
             else:
