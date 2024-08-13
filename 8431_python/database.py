@@ -31,12 +31,17 @@ def add_user(username, password, name, age, gender, location, interests, introdu
     conn = create_connection()
     cursor = conn.cursor()
     
-    weights = json.dumps({
+    weights = {
             'age': 1.0,
             'gender_Male': 1.0,
             'gender_Female': 1.0,
             'location': 1.0,
-            'introduction': 1.0})
+            'introduction': 1.0}
+    
+    for interest in interests:
+            weights[interest] = 1.0
+
+    weights = json.dumps(weights)
     
     cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests, introduction, attribute_weights)
                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
