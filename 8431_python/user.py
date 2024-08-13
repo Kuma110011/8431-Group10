@@ -38,12 +38,15 @@ class User:
             return [data_type(item) for item in attr.split(',') if item.strip()] if attr else []
         return attr if attr is not None else []
 
-    def update_weight(self, other_user, multiplier):
+    def update_weight(self, multiplier, chosen_attr):
         """Adjusts the weight of matching attributes between this user and another user."""
-        for attr in self._attribute_weights:
-            if hasattr(self, attr) and hasattr(other_user, attr):
-                if getattr(self, attr) == getattr(other_user, attr):
-                    self._attribute_weights[attr] *= multiplier
+        if chosen_attr != None:
+            self._attribute_weights[chosen_attr] *= multiplier
+
+        # for attr in self._attribute_weights:
+        #     if hasattr(self, attr) and hasattr(other_user, attr):
+        #         if getattr(self, attr) == getattr(other_user, attr):
+        #             self._attribute_weights[attr] *= multiplier
     
     def get_attribute_weights(self):
         return self._attribute_weights
@@ -52,18 +55,18 @@ class User:
         """assign attribute weights given <dict>"""
         self._attribute_weights = dict
 
-    def like(self, other_user):
+    def like(self, other_user,chosen_attr):
         if other_user.user_id not in self.liked_users:
             self.liked_users.append(other_user.user_id)
-        self.update_weight(other_user, 1.1)  # increase weight for matched attributes
+        self.update_weight(1.1,chosen_attr)# increase weight for matched attributes 
         if self.user_id in other_user.liked_users and other_user.user_id not in self.matches:
             self.matches.append(other_user.user_id)
             other_user.matches.append(self.user_id)
 
-    def dislike(self, other_user):
+    def dislike(self, other_user,chosen_attr):
         if other_user.user_id not in self.disliked_users:
             self.disliked_users.append(other_user.user_id)
-        self.update_weight(other_user, 0.9)  # decrease weight for unmatched attributes
+        self.update_weight(0.9, chosen_attr)  # decrease weight for unmatched attributes
 
     def __repr__(self):
         return (f'User({self.user_id}, {self.account}, {self.name}, {self.age}, {self.gender}, '

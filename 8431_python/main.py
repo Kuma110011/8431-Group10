@@ -157,13 +157,13 @@ def recommend(current_user, all_users):
         candidates = [user for user in available_users if chosen_attr in user.interests]
 
     if candidates:
-        return random.choice(candidates)
+        return random.choice(candidates), chosen_attr
     else:
         if available_users == []:
             print("No more users for recommendation")
-            return None
+            return None, None
         else:
-            return random.choice(available_users)
+            return random.choice(available_users), None
         
 def semantic_similarity(text1, text2):
     texts = [text1, text2]
@@ -178,21 +178,22 @@ def start_swiping(current_user):
     while True:
 
         recommended_user = recommend(current_user, all_users)
-
-        print(f"\nRecommended User: {recommended_user}")
-        if recommended_user is None:
+        print(f"\nRecommended User: {recommended_user[0]}")
+        if recommended_user[0] is None:
             return
         
         action = input("Do you like this user? (yes/no/exit): ").lower()
 
         if action == "yes":
-            current_user.like(recommended_user)
+            current_user.like(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
-            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
+            all_users.remove(recommended_user[0])  # 从推荐列表中移除已处理的用户
+            print(current_user.get_attribute_weights())
         elif action == "no":
-            current_user.dislike(recommended_user)
+            current_user.dislike(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
-            all_users.remove(recommended_user)  # 从推荐列表中移除已处理的用户
+            all_users.remove(recommended_user[0])  # 从推荐列表中移除已处理的用户
+            print(current_user.get_attribute_weights())
         elif action == "exit":
             break
         else:
