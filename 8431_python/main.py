@@ -86,7 +86,7 @@ def sign_in():
     if user_data and user_data[2] == password:
         print(f"Welcome, {user_data[3]}!")
         current_user = User(*user_data[:-1])
-        current_user.assign_attribute_weights(json.loads(user_data[-1])
+        current_user.assign_attribute_weights(json.loads(user_data[-1]))
         return current_user
     else:
         print("Wrong Account or Password.")
