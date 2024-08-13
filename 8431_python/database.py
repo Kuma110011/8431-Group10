@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from user import User
 
 def create_connection():
     conn = sqlite3.connect('matching_app.db')
@@ -26,15 +27,20 @@ def create_tables():
     conn.commit()
     conn.close()
 
-
-
 def add_user(username, password, name, age, gender, location, interests, introduction):
     conn = create_connection()
     cursor = conn.cursor()
     
-    cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests, introduction)
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', 
-                   (username, password, name, age, gender, location, ','.join(interests), introduction))
+    weights = json.dumps({
+            'age': 1.0,
+            'gender_Male': 1.0,
+            'gender_Female': 1.0,
+            'location': 1.0,
+            'introduction': 1.0})
+    
+    cursor.execute('''INSERT INTO users (username, password, name, age, gender, location, interests, introduction, attribute_weights)
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', 
+                   (username, password, name, age, gender,location, ','.join(interests), introduction, weights))
     conn.commit()
     conn.close()
 
@@ -50,17 +56,32 @@ def get_user_by_id(user_id):
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,))
-    user = cursor.fetchone()
+    user_data = cursor.fetchone()
     conn.close()
-    return user
+    
+    if user_data:
+        user = User(*user_data[:-1]) #exclude attribute_weights for now
+        weights = json.loads(user_data[-1]) #read the json string into dictionary
+        user.assign_attribute_weights(weights)
+        return user #return a User type
+    
+    return None
 
 def get_all_users():
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users')
-    all_users = cursor.fetchall()
+    all_users_data = cursor.fetchall()
     conn.close()
-    return all_users
+    
+    all_users = []
+    for user_data in all_users_data:
+        user = User(*user_data[:-1]) 
+        weights = json.loads(user_data[-1]) #read the json string into dictionary
+        user.assign_attribute_weights(weights)
+        all_users.append(user) #append the User object into the all_users list
+        
+    return all_users # list of User object
 
 def delete_user(user_id):
     conn = create_connection()
@@ -105,12 +126,13 @@ def update_user(user):
     liked_users = ','.join(filter(None, map(str, user.liked_users)))
     disliked_users = ','.join(filter(None, map(str, user.disliked_users)))
     matches = ','.join(filter(None, map(str, user.matches)))
+    weights = json.dumps(user.get_attribute_weights())
 
     cursor.execute("""
         UPDATE users
         SET name = ?, age = ?, gender = ?, location = ?, interests = ?, introduction = ?, liked_users = ?, disliked_users = ?, matches = ?, attribute_weights = ?
         WHERE user_id = ?
-    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests),user.introduction, liked_users, 
-          disliked_users, matches, user.attribute_weights, user.user_id))
+    """, (user.name, user.age, user.gender, user.location, ','.join(user.interests), user.introduction, liked_users, 
+          disliked_users, matches, weights, user.user_id))
     conn.commit()
     conn.close()

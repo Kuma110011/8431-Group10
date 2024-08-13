@@ -2,7 +2,7 @@
 
 class User:
     def __init__(self, user_id, account, password, name, age, gender, location, interests,introduction,
-                 liked_users=None, disliked_users=None, matches=None,attribute_weights = None):
+                 liked_users=None, disliked_users=None, matches=None):
         self.user_id = user_id
         self.account = account
         self.password = password
@@ -21,7 +21,8 @@ class User:
         self.matches = self._convert_to_list(matches, int)
 
         # Initialize attribute_weights with default values
-        self.attribute_weights = {
+        #TODO: attribute_weights should be a private attribute
+        self._attribute_weights = {
             'age': 1.0,
             'gender_Male': 1.0,
             'gender_Female': 1.0,
@@ -29,10 +30,7 @@ class User:
             'introduction': 1.0}
             # You can add other attributes as needed
         for interest in self.interests:
-            self.attribute_weights[interest] = 1.0
-
-
-        
+            self._attribute_weights[interest] = 1.0
 
     def _convert_to_list(self, attr, data_type):
         """Helper method to convert a comma-separated string to a list of integers"""
@@ -42,10 +40,17 @@ class User:
 
     def update_weight(self, other_user, multiplier):
         """Adjusts the weight of matching attributes between this user and another user."""
-        for attr in self.attribute_weights:
+        for attr in self._attribute_weights:
             if hasattr(self, attr) and hasattr(other_user, attr):
                 if getattr(self, attr) == getattr(other_user, attr):
-                    self.attribute_weights[attr] *= multiplier
+                    self._attribute_weights[attr] *= multiplier
+    
+    def get_attribute_weights(self):
+        return self._attribute_weights
+    
+    def assign_attribute_weights(self, dict):
+        """assign attribute weights given <dict>"""
+        self._attribute_weights = dict
 
     def like(self, other_user):
         if other_user.user_id not in self.liked_users:

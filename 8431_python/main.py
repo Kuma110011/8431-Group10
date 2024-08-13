@@ -9,6 +9,7 @@ import calendar
 import random
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import json
 
 def welcome():
     print("welcome to tinderlink!")
@@ -70,8 +71,9 @@ def sign_up():
     if existing_user:
         print("Already exist, please sign in")
         return
-
-    database.add_user(account, password, name, age, gender, location, interests,introduction)
+    
+    database.add_user(account, password, name, age, gender, location, interests, introduction)
+    
     print("You are registered, this will be automatically close and please sign in")
     time.sleep(2)
 
@@ -83,7 +85,9 @@ def sign_in():
     user_data = database.get_user(account)
     if user_data and user_data[2] == password:
         print(f"Welcome, {user_data[3]}!")
-        return User(*user_data)
+        current_user = User(*user_data[:-1])
+        current_user.assign_attribute_weights(json.loads(user_data[-1])
+        return current_user
     else:
         print("Wrong Account or Password.")
         return None
@@ -131,10 +135,10 @@ def recommend(current_user, all_users):
     excluded_users = set(current_user.liked_users + current_user.disliked_users)
     available_users = [user for user in all_users if user.user_id not in excluded_users and user.user_id != current_user.user_id]
 
-    total_weight = sum(current_user.attribute_weights.values())
+    total_weight = sum(current_user.get_attribute_weights().values())
     chosen_attr = random.choices(
-        population=list(current_user.attribute_weights.keys()),
-        weights=list(current_user.attribute_weights.values()),
+        population=list(current_user.get_attribute_weights().keys()),
+        weights=list(current_user.get_attribute_weights().values()),
         k=1
     )[0]
 
@@ -169,7 +173,7 @@ def semantic_similarity(text1, text2):
 
 def start_swiping(current_user):
     all_users = database.get_all_users()
-    all_users = [User(*user_data) for user_data in all_users if user_data[0] != current_user.user_id]
+    all_users = [user for user in all_users if user.user_id != current_user.user_id] #list of User objects
    
     while True:
 
@@ -257,9 +261,8 @@ def edit_profile(user):
 def view_matches(user):
     matches = []
     for liked_user_id in user.liked_users:
-        other_user_data = database.get_user_by_id(liked_user_id)
-        if other_user_data:
-            other_user = User(*other_user_data)
+        other_user = database.get_user_by_id(liked_user_id)
+        if isinstance(other_user, User):
             if user.user_id in other_user.liked_users:
                 matches.append(other_user)
     
