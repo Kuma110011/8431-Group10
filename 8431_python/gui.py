@@ -326,7 +326,7 @@ class TinderLinkApp:
             database.update_user(other_user)
 
         # Finally, delete the user from the database
-        database.delete_users(self.user.user_id)
+        database.delete_user(self.user.user_id)
 
         # Inform the user that their profile has been deleted
         messagebox.showinfo("Deleted", "Your profile has been deleted.")

@@ -91,7 +91,12 @@ def delete_user(user_id):
     all_users = cursor.fetchall()
 
     for user_data in all_users:
-        current_user_id, username, password, name, age, gender, location, interests, introduction, liked_users, disliked_users, matches = user_data
+        # Adjust unpacking according to the actual number of columns
+        if len(user_data) == 13:
+            (current_user_id, username, password, name, age, gender, location, interests, introduction, liked_users, disliked_users, matches, extra_col) = user_data
+        else:
+            print("Unexpected number of columns:", len(user_data))
+            continue
         
         liked_users_list = list(map(int, liked_users.split(','))) if liked_users else []
         disliked_users_list = list(map(int, disliked_users.split(','))) if disliked_users else []
