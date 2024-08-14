@@ -16,6 +16,7 @@ class RotmanDateApp:
     def __init__(self, root):
         self.root = root
         self.root.title("RotmanDate")
+        self.root.geometry("400x800")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
         self.logo = PhotoImage(file="logo_final.png")
@@ -50,15 +51,15 @@ class RotmanDateApp:
 
         Label(self.root, text="Sign Up", font=('Arial', 24)).pack(pady=10)
 
-        Label(self.root, text="Username").pack(pady=5)
+        Label(self.root, text="Username").pack(pady=3)
         self.username_entry = Entry(self.root)
         self.username_entry.pack()
 
-        Label(self.root, text="Password").pack(pady=5)
+        Label(self.root, text="Password").pack(pady=3)
         self.password_entry = Entry(self.root, show='*')
         self.password_entry.pack()
 
-        Label(self.root, text="Name").pack(pady=5)
+        Label(self.root, text="Name").pack(pady=3)
         self.name_entry = Entry(self.root)
         self.name_entry.pack()
 
@@ -74,11 +75,11 @@ class RotmanDateApp:
         gender_menu = OptionMenu(self.root, self.gender_var, *gender_options)
         gender_menu.pack(pady=5)
 
-        Label(self.root, text="Location").pack(pady=5)
+        Label(self.root, text="Location").pack(pady=3)
         self.location_entry = Entry(self.root)
         self.location_entry.pack()
 
-        Label(self.root, text="Interests").pack(pady=5)
+        Label(self.root, text="Interests").pack(pady=3)
         
         self.interests_entry = {}
         interest_options = ["Music", "Sports", "Movies", "Reading", "Traveling", "Cooking", "Art", "Gaming"]
@@ -89,11 +90,11 @@ class RotmanDateApp:
             cb = Checkbutton(self.root, text=interest, variable=var)
             cb.pack(anchor='w', padx=10)
 
-        Label(self.root, text="Introduction").pack(pady=5)
+        Label(self.root, text="Introduction").pack(pady=3)
         self.introduction_entry = Entry(self.root)
         self.introduction_entry.pack()
 
-        Button(self.root, text="Sign Up", command=self.sign_up).pack(pady=20)
+        Button(self.root, text="Sign Up", command=self.sign_up).pack(pady=10)
         Button(self.root, text="Back to Login", command=self.create_login_screen).pack(pady=5)
 
     def create_user_menu(self): 
@@ -172,7 +173,7 @@ class RotmanDateApp:
             return
 
         self.swipe_window = Toplevel(self.root)
-        self.swipe_window.title("Start Swiping")
+        self.swipe_window.title("RotmanDate")
 
         self.swipe_index = 0
         self.all_users = all_users
