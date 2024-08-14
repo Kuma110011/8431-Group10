@@ -65,7 +65,7 @@ class TinderLinkApp:
         Label(self.root, text="Gender").pack(pady=5)
         self.gender_var = StringVar(self.root)
         self.gender_var.set("Select")  # Default value
-        gender_options = ["Male", "Female", "Unknown"]
+        gender_options = ["Male", "Female", "Others"]
         gender_menu = OptionMenu(self.root, self.gender_var, *gender_options)
         gender_menu.pack(pady=5)
 
@@ -254,10 +254,10 @@ class TinderLinkApp:
         name_entry.pack()
 
 
-        Label(self.root, text="Gender").pack(pady=5)
-        gender_entry = Entry(self.root)
-        gender_entry.insert(0, self.user.gender)
-        gender_entry.pack()
+        #Label(self.root, text="Gender").pack(pady=5)
+        #gender_entry = Entry(self.root)
+        #gender_entry.insert(0, self.user.gender)
+        #gender_entry.pack()
 
         Label(self.root, text="Location").pack(pady=5)
         location_entry = Entry(self.root)
@@ -276,8 +276,6 @@ class TinderLinkApp:
 
         def save_profile():
             self.user.name = name_entry.get()
-            self.user.age = int(age_entry.get())
-            self.user.gender = gender_entry.get()
             self.user.location = location_entry.get()
             self.user.interests = interests_entry.get().split(',')
             self.user.introduction = introduction_entry.get()
