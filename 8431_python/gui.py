@@ -3,7 +3,8 @@ import sys
 from datetime import datetime
 import calendar
 import random
-from tkinter import Tk, Toplevel, Label, Entry, Button, messagebox, StringVar, OptionMenu, Listbox
+from tkinter import Tk, Toplevel, Label, Entry, Button, messagebox, StringVar, OptionMenu, Listbox, PhotoImage
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import json
@@ -17,6 +18,7 @@ class TinderLinkApp:
         self.root.title("TinderLink")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
+        self.logo = PhotoImage(file="logo.png")
         self.create_login_screen()
 
     def clear_screen(self):
@@ -27,6 +29,9 @@ class TinderLinkApp:
         self.clear_screen()
 
         Label(self.root, text="Login", font=('Arial', 24)).pack(pady=10)
+
+        logo_label = Label(self.root, image=self.logo)
+        logo_label.pack(pady=10) 
 
         Label(self.root, text="Username").pack(pady=5)
         self.username_entry = Entry(self.root)
@@ -252,12 +257,6 @@ class TinderLinkApp:
         name_entry = Entry(self.root)
         name_entry.insert(0, self.user.name)
         name_entry.pack()
-
-
-        #Label(self.root, text="Gender").pack(pady=5)
-        #gender_entry = Entry(self.root)
-        #gender_entry.insert(0, self.user.gender)
-        #gender_entry.pack()
 
         Label(self.root, text="Location").pack(pady=5)
         location_entry = Entry(self.root)
