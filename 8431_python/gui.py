@@ -224,10 +224,19 @@ class TinderLinkApp:
         self.swipe_window.destroy()
         self.create_user_menu()
 
+    #skip user means skipping for now, but he/she can be recommended again unlike dislike
     def skip_user_and_continue(self):
-        self.skipped_users.append(self.all_users[self.swipe_index])
-        self.swipe_index += 1
-        self.show_next_user_swiping()
+        if self.swipe_index < len(self.all_users):
+            self.skipped_users.append(self.all_users[self.swipe_index])
+            self.swipe_index += 1
+            if self.swipe_index < len(self.all_users):
+                self.show_next_user_swiping()
+            else:
+                self.swipe_window.destroy()
+                self.no_more_users()
+        else:
+            self.swipe_window.destroy()
+            self.no_more_users()
 
     def no_more_users(self):
         no_users_window = Toplevel(self.root)
