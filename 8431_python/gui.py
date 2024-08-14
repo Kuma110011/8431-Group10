@@ -12,10 +12,10 @@ from user import User
 import database
 from main import recommend
 
-class TinderLinkApp:
+class RotmanDateApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("TinderLink")
+        self.root.title("RotmanDate")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
         self.logo = PhotoImage(file="logo_final.png")
@@ -457,5 +457,5 @@ def calculate_age(dob):
 if __name__ == "__main__":
     database.create_tables()
     root = Tk()
-    app = TinderLinkApp(root)
+    app = RotmanDateApp(root)
     root.mainloop()
