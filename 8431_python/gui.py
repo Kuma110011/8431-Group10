@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 import calendar
 import random
-from tkinter import Tk, Toplevel, Label, Entry, Button, messagebox, StringVar, OptionMenu, Listbox, PhotoImage
+from tkinter import Tk, Toplevel, Label, Entry, Button, messagebox, StringVar, OptionMenu, Listbox, PhotoImage, BooleanVar, Checkbutton
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -78,9 +78,16 @@ class TinderLinkApp:
         self.location_entry = Entry(self.root)
         self.location_entry.pack()
 
-        Label(self.root, text="Interests (comma-separated)").pack(pady=5)
-        self.interests_entry = Entry(self.root)
-        self.interests_entry.pack()
+        Label(self.root, text="Interests").pack(pady=5)
+        
+        self.interests_entry = {}
+        interest_options = ["Music", "Sports", "Movies", "Reading", "Traveling", "Cooking", "Art", "Gaming"]
+        
+        for interest in interest_options:
+            var = BooleanVar()
+            self.interests_entry[interest] = var
+            cb = Checkbutton(self.root, text=interest, variable=var)
+            cb.pack(anchor='w', padx=10)
 
         Label(self.root, text="Introduction").pack(pady=5)
         self.introduction_entry = Entry(self.root)
@@ -127,11 +134,15 @@ class TinderLinkApp:
         age = calculate_age(dob)
         gender = self.gender_var.get()
         location = self.location_entry.get()
-        selected_interests = self.interests_entry.get().split(',')
         introduction = self.introduction_entry.get()
+        selected_interests = [interest for interest, var in self.interests_entry.items() if var.get()]
 
         if gender == "Select":
             messagebox.showerror("Error", "Please select a gender.")
+            return
+        
+        if not selected_interests:
+            messagebox.showerror("Error", "Please select at least one interest.")
             return
 
         existing_user = database.get_user(account)
@@ -263,10 +274,16 @@ class TinderLinkApp:
         location_entry.insert(0, self.user.location)
         location_entry.pack()
 
-        Label(self.root, text="Interests (comma-separated)").pack(pady=5)
-        interests_entry = Entry(self.root)
-        interests_entry.insert(0, ', '.join(self.user.interests))
-        interests_entry.pack()
+        Label(self.root, text="Interests").pack(pady=5)
+        self.interests_entry = {}
+        interest_options = ["Music", "Sports", "Movies", "Reading", "Traveling", "Cooking", "Art", "Gaming"]
+        for interest in interest_options:
+            var = BooleanVar()
+            if interest in self.user.interests:
+                var.set(True)  # Preselect the interests that the user already has
+            self.interests_entry[interest] = var
+            cb = Checkbutton(self.root, text=interest, variable=var)
+            cb.pack(anchor='w', padx=10)
 
         Label(self.root, text="Introduction").pack(pady=5)
         introduction_entry = Entry(self.root)
@@ -276,7 +293,7 @@ class TinderLinkApp:
         def save_profile():
             self.user.name = name_entry.get()
             self.user.location = location_entry.get()
-            self.user.interests = interests_entry.get().split(',')
+            self.user.interests = [interest for interest, var in self.interests_entry.items() if var.get()]
             self.user.introduction = introduction_entry.get()
             database.update_user(self.user)
             messagebox.showinfo("Success", "Your profile has been updated.")
