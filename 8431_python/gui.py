@@ -18,7 +18,7 @@ class TinderLinkApp:
         self.root.title("TinderLink")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
-        self.logo = PhotoImage(file="logo.png")
+        self.logo = PhotoImage(file="logo_final.png")
         self.create_login_screen()
 
     def clear_screen(self):
