@@ -12,14 +12,14 @@ from user import User
 import database
 from main import recommend
 
-class RotmanDateApp:
+class RotmanticApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("RotmanDate")
+        self.root.title("Rotmantic")
         self.root.geometry("400x800")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
-        self.logo = PhotoImage(file="logo_final.png")
+        self.logo = PhotoImage(file="logo_rotmantic.png")
         self.create_login_screen()
 
     def clear_screen(self):
@@ -173,7 +173,7 @@ class RotmanDateApp:
             return
 
         self.swipe_window = Toplevel(self.root)
-        self.swipe_window.title("RotmanDate")
+        self.swipe_window.title("Rotmantic")
 
         self.swipe_index = 0
         self.all_users = all_users
@@ -458,5 +458,5 @@ def calculate_age(dob):
 if __name__ == "__main__":
     database.create_tables()
     root = Tk()
-    app = RotmanDateApp(root)
+    app = RotmanticApp(root)
     root.mainloop()
