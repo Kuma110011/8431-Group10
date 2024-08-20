@@ -28,13 +28,13 @@ This file defines the `User` class, which employs Object-Oriented Programming pr
     + `location (str)`: The user's location.
     + `interests (list)`: A list of the user’s interests, stored as strings.
     + `introduction (str)`: the bio for the user.
-    + `liked_users`: A list of user IDs that the user has liked.
-    + `disliked_users`: A list of user IDs that the user has disliked.
-    + `matches`: A list of user IDs that have mutually liked each other (i.e., matches).
+    + `liked_users （list)`: A list of user IDs that the user has liked.
+    + `disliked_users (list)`: A list of user IDs that the user has disliked.
+    + `matches (list)`: A list of user IDs that have mutually liked each other (i.e., matches).
 
 + Methods: 
-    + `like`: Allows a user to like another user. If there is a mutual like, a match is created.
-    + `dislike`: Allows a user to dislike another user.
+    + `like()`: Allows a user to like another user. If there is a mutual like, a match is created.
+    + `dislike()`: Allows a user to dislike another user.
 
 ### 2. `database.py`
 
