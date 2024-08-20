@@ -15,7 +15,9 @@ Rotmantic is a dating application facing Rotman students. This project allows us
 
 ## Project Structure
 
-1. `user.py` file defines the `User` class, which employs Object-Oriented Programming principles to manage the attributes for each user in the system. Key features including:
+### 1. `user.py` file 
+
+This file defines the `User` class, which employs Object-Oriented Programming principles to manage the attributes for each user in the system. Key features including:
 + Attributes:
     + `user_id (str)`: Unique identifier for each user.
     + `account (str)`: The username associated with the user’s account.
@@ -34,10 +36,12 @@ Rotmantic is a dating application facing Rotman students. This project allows us
     + `like`: Allows a user to like another user. If there is a mutual like, a match is created.
     + `dislike`: Allows a user to dislike another user.
 
-2. `database.py`
+### 2. `database.py`
 
 
-3. `main.py` defines our command line interface, it creates welcome menu, user menu, allows user to swipe, edit and delete its profile, and view matches. The main functions and their roles are as follows:
+### 3. `main.py` 
+
+This file defines our command line interface, it creates welcome menu, user menu, allows user to swipe, edit and delete its profile, and view matches. The main functions and their roles are as follows:
 
 + `welcome()`: Displays the welcome message and the main menu options: Sign In, Sign Up, and Exit.
 + `sign_up()`: a function that asks user to input the basic information(account, password, name, age, gender, location, interest, introduction) to create a new profile and ensures the user is not an existing user. After registration, the program prompts the current user to sign in.
