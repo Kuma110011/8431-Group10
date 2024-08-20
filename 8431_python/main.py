@@ -12,6 +12,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import json
 
 def welcome():
+    """a function that prints the welcome menu"""
     print("welcome to tinderlink!")
     print("1.Sign In")
     print("2.Sign Up")
@@ -19,6 +20,7 @@ def welcome():
 
 
 def get_valid_int_input(prompt, min, max):
+    """a helper function that ensures a valid input within a given range"""
     while True:
         try:
             value = int(input(prompt))
@@ -31,6 +33,7 @@ def get_valid_int_input(prompt, min, max):
 
 
 def get_user_dob():
+    """a function that asks the input of date of birth from the user and returns the date of birth in a standard date format"""
     today = datetime.today()
     year = get_valid_int_input("Your year of birth (e.g., 1990): ", 1000, today.year)
     month = get_valid_int_input("Your month of birth (e.g., 8 for August): ", 1, 12)
@@ -43,6 +46,7 @@ def get_user_dob():
 
 
 def calculate_age(dob):
+    """a function that returns the age of users by birthday"""
     today = datetime.today()
     age = today.year - dob.year
 
@@ -52,6 +56,8 @@ def calculate_age(dob):
 
 
 def sign_up():
+    """a function that asks user to input the basic information(account, password, name, age, gender, location, interest, 
+    introduction) to create a new profile and ensures the user is not an existing user"""
     print("Sign Up")
     account = input("Account: ")
     password = input("Password: ")
@@ -59,7 +65,6 @@ def sign_up():
     age = calculate_age(get_user_dob())
     gender = input("Gender: ")
     location = input("Location: ")
-    
     print("Select your interests from the following options (separated by commas):")
     print("""
     Travel, Music, Gym, Tattoos, Coffee, Films, Walking, Netflix, Shopping, Outdoors,
@@ -67,6 +72,7 @@ def sign_up():
     """)
     interests = input("interests(Separated By Text): ").split(',')
     introduction = input("Introduction: ")
+
     existing_user = database.get_user(account)
     if existing_user:
         print("Already exist, please sign in")
@@ -77,7 +83,9 @@ def sign_up():
     print("You are registered, this will be automatically close and please sign in")
     time.sleep(2)
 
+
 def sign_in():
+    """a function that asks user to input right account and passward to sign in"""
     print("Sign In")
     account = input("Account: ")
     password = input("Password: ")
@@ -92,7 +100,9 @@ def sign_in():
         print("Wrong Account or Password.")
         return None
 
+
 def main():
+    """a function that starts the application and calls the sign_in, user_menu, sign_up functions based on user's choice"""
     database.create_tables()
 
     while True:
@@ -110,7 +120,10 @@ def main():
         else:
             print("Invalid choice, please try again.")
 
+
 def user_menu(user):
+    """a function that prints the user menu and calls start_swiping, view_own_profile, view_matches functions 
+    according to the user's choice"""
     while True:
         print(f"\nWelcome {user.name}")
         print("1. Start swiping")
@@ -131,11 +144,13 @@ def user_menu(user):
         else:
             print("Invalid choice, please try again.")
 
+
 def recommend(current_user, all_users):
+    """a function that selects one attribute by probability based on the weight of each attribute, picks up a list of 
+    users who have the same selected attribute as the current user, and randomly recommend a user from the list to the current user"""
     excluded_users = set(current_user.liked_users + current_user.disliked_users)
     available_users = [user for user in all_users if user.user_id not in excluded_users and user.user_id != current_user.user_id]
 
-    total_weight = sum(current_user.get_attribute_weights().values())
     chosen_attr = random.choices(
         population=list(current_user.get_attribute_weights().keys()),
         weights=list(current_user.get_attribute_weights().values()),
@@ -164,14 +179,18 @@ def recommend(current_user, all_users):
             return None, None
         else:
             return random.choice(available_users), None
-        
+
+
 def semantic_similarity(text1, text2):
+    """a helper function that calculates the semantic similarity between two texts"""
     texts = [text1, text2]
     vectorizer = TfidfVectorizer().fit_transform(texts)
     similarity_matrix = cosine_similarity(vectorizer)
     return similarity_matrix[0, 1]
 
+
 def start_swiping(current_user):
+    """a function that asks the user to choose "like, dislike, or skip" on the recommended user"""
     all_users = database.get_all_users()
     all_users = [user for user in all_users if user.user_id != current_user.user_id] #list of User objects
    
@@ -187,12 +206,12 @@ def start_swiping(current_user):
         if action == "yes":
             current_user.like(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
-            all_users.remove(recommended_user[0])  # 从推荐列表中移除已处理的用户
+            all_users.remove(recommended_user[0])  
             print(current_user.get_attribute_weights())
         elif action == "no":
             current_user.dislike(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
-            all_users.remove(recommended_user[0])  # 从推荐列表中移除已处理的用户
+            all_users.remove(recommended_user[0]) 
             print(current_user.get_attribute_weights())
         elif action == "exit":
             break
@@ -205,6 +224,8 @@ def start_swiping(current_user):
                     
                     
 def view_own_profile(user):
+    """a function that prints the profile of the user and calls edit_profile function or deletes 
+    the profile according to the user's choice"""
     while True:
         print("\nYour Profile")
         print(f"Your Mathching ID: {user.user_id}")
@@ -246,7 +267,9 @@ def view_own_profile(user):
         else:
             print("Invalid choice. Please try again.")
 
+
 def edit_profile(user):
+    """a function that shows the user current profile and asks the user to input the changes on the profile"""
     print("\nEdit Profile")
     user.name = input(f"Name ({user.name}): ") or user.name
     user.gender = input(f"Gender ({user.gender}): ") or user.gender
@@ -259,7 +282,9 @@ def edit_profile(user):
     database.update_user(user)
     print("Your profile has been updated.")
 
+
 def view_matches(user):
+    """a function that adds both-like users to the match list and prints out the matching result"""
     matches = []
     for liked_user_id in user.liked_users:
         other_user = database.get_user_by_id(liked_user_id)
@@ -271,5 +296,9 @@ def view_matches(user):
     for match in matches:
         print(match)
 
+
 if __name__ == "__main__":
+    """the block ensures that the main() function is called only when the script is run directly,
+    if it is imported as a module in another script, main() function will not run
+    """
     main()
