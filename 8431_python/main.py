@@ -13,7 +13,7 @@ import json
 
 def welcome():
     """a function that prints the welcome menu"""
-    print("welcome to tinderlink!")
+    print("welcome to Rotmantic!")
     print("1.Sign In")
     print("2.Sign Up")
     print("3.Exit")
@@ -125,7 +125,7 @@ def user_menu(user):
     """a function that prints the user menu and calls start_swiping, view_own_profile, view_matches functions 
     according to the user's choice"""
     while True:
-        print(f"\nWelcome {user.name}")
+        print(f"\nWelcome {user.name},")
         print("1. Start swiping")
         print("2. Your Own Profiles")
         print("3. View matches")

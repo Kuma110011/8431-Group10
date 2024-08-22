@@ -152,14 +152,73 @@ First, refer to `requirements.txt` to make sure all dependencies are correctly s
 
 1. Run the Application: navigate to the project directory in your Python IDE, and run the `main.py` file. The following command lines will show up in your terminal:
 
-```python
-welcome to tinderlink!
+```
+welcome to Rotmantic!
 1.Sign In
 2.Sign Up
 3.Exit
 Please choose an option:
 ```
++ Type `1` if you want to sign in, type `2` if you want to sign up for your account, type `3` to exit and end the program.
 
+2. User Menu Interaction: Once sign in, user has 4 interaction options: swiping, view profiles, view matches, and log out. See the following example for User Menu:
+
+```
+Welcome John,
+1. Start swiping
+2. Your Own Profiles
+3. View matches
+4. Log out
+Please select what to do: 
+```
+
++ Type `1` to start swiping mode, a recommended user profile will be prompt out. The user can either mark the recommended user profile as "like/dislike", and the action will be count into the matching algorithm. The more user swipes, the more personalized recommendation will be. Once the user is tired of swiping, type 'exit' to end the swiping mode. See following the example of usage:
+
+```
+Welcome Jane,
+1. Start swiping
+2. Your Own Profiles
+3. View matches
+4. Log out
+Please select what to do: 
+1
+
+Recommended User: User(5, user5, Chris, 27, Male, New York, ['Sports', 'Traveling', 'Gaming'], [], [], [])
+Do you like this user? (yes/no/exit): yes
+```
+
++ Type `2` to view user's own profile, and the user can edit/delete profile, or go back to the user menu. In the edition mode, the original content is preserved in brackets to allow user review. Note that the program only allow user to edit `name, gender, location, interest, and introduction`. Leaves the line blank and hit `enter` if no changes are going to made. 
+
+```
+Options:
+1. Edit Profile
+2. Delete Profile
+3. Go Back
+Choose an option: 1
+
+Edit Profile
+Name (Jane): 
+Gender (Female): 
+Location (New York): 
+Interests (): 
+introduction (Hi, I am Jane. I love Reading, Traveling, Cooking.): 
+```
+
++ Type `3` to view matches, this will show up recommended user profiles in the terminal by order (most recommend to lest recommend), if there exists recommend users. See below the example usage:
+
+```
+Welcome Jane,
+1. Start swiping
+2. Your Own Profiles
+3. View matches
+4. Log out
+Please select what to do: 
+3
+Your matches:
+User(1, user1, John, 25, Male, Toronto, ['Music', 'Sports', 'Movies'], [2, 4, 5, 10, 3], [8, 7, 6], [])
+```
+
++ Type `4` if the user wants to log out the current account.
 
 
 ## Acknowledgements
