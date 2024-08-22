@@ -225,7 +225,7 @@ User(1, user1, John, 25, Male, Toronto, ['Music', 'Sports', 'Movies'], [2, 4, 5,
 
 ### Graphical User Interface (GUI)
 
-The usage of graphical user interface has some logics as the CLI is the same, but offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
+The usage of graphical user interface has the same logics as the CLI, but it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
 
 
 ## Acknowledgements
