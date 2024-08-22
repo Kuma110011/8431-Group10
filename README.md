@@ -52,4 +52,51 @@ This file defines our command line interface, it creates welcome menu, user menu
     + If the user chooses "Your Own Profiles",  `view_own_profile(user)` is called. This function prints the profile of the user and provides 3 options "Edit Profile", "Delete Profile", and "Go back" for the user. If the user chooses "Edit Profile", `edit_profile()` function is called to present the user current profile and modify the profile based on the user's input. 
     + If the user chooses "View matches", `view_matches(user)` is called. This function adds the mutual users to the match list and shows the matching result to the user
 
+### 3. `gui.py` 
+GUI.py
+This file defines the graphical user interface (GUI) for the Rotmantic app using the Tkinter library. It provides an intuitive interface for users to interact with the app. Below are the main components and their roles:
 
+RotmanticApp Class: The main class that manages the entire GUI application, handling user interactions and transitions between different screens.
+
+__init__(self, root): Initializes the main window, sets up the application title, dimensions, and the initial screen.
+
+create_login_screen(): Displays the login screen where users can enter their username and password. Provides options to log in, sign up, or exit the application.
+
+create_signup_screen(): Presents the sign-up form where new users can register by entering their details like username, password, name, date of birth, gender, location, interests, and introduction.
+
+login(): Validates user credentials against the database. If valid, it proceeds to the user menu; otherwise, it displays an error message.
+
+sign_up(): Handles the user registration process, including input validation, and stores the new user in the database.
+
+create_user_menu(): Displays the user menu after successful login, offering options to start swiping, view profile, view matches, or log out.
+
+start_swiping(): Initiates the swiping feature where users can browse through recommended profiles and choose to like, dislike, or skip them.
+
+show_next_user_swiping(): Displays the next user profile for swiping and handles user actions such as like, dislike, or skip.
+
+skip_user_and_continue(): Allows users to skip a profile without making a decision, and proceed to the next profile.
+
+view_profile(): Allows the user to view their profile information, including personal details, interests, and introduction.
+
+edit_profile(): Enables users to modify their profile information, including name, location, interests, and introduction.
+
+delete_profile(): Provides the option to delete the user's profile permanently after confirmation.
+
+view_matches(): Displays a list of all users who have mutually liked each other, and allows the user to view detailed profiles of their matches.
+
+show_match_profile(): Displays the profile of a matched user, providing details such as name, age, gender, location, interests, and introduction.
+
+like_user(): Handles the action of liking a user during swiping and updates the database accordingly.
+
+dislike_user(): Handles the action of disliking a user during swiping and updates the database accordingly.
+
+no_more_users(): Informs the user when there are no more profiles available to swipe.
+
+**clear_screen() and clear_swipe_window(): Utility functions to clear the current screen or swiping window before displaying new content.
+
+Additional Features
+Error Handling: The application includes error handling for invalid inputs, such as an incorrect date of birth format or an existing account during sign-up.
+
+Popup Messages: Uses Tkinter's messagebox to display information, success, and error messages to the user.
+
+This GUI version of Rotmantic provides a more user-friendly and visually appealing interface compared to the command-line interface described in main.py. It retains all core functionalities while enhancing user interaction through graphical elements.
