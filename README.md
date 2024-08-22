@@ -32,8 +32,11 @@ This file defines the `User` class, which employs Object-Oriented Programming pr
     + `matches (list)`: A list of user IDs that have mutually liked each other (i.e., matches).
 
 + Methods: 
-    + `like()`: Allows a user to like another user. If there is a mutual like, a match is created.
-    + `dislike()`: Allows a user to dislike another user.
+    + `like()`: Allows a user to like another user, and adjust the weight for the chosen attribute (to make recommendation) by 1.1. If there is a mutual like, a match is created.
+    + `dislike()`: Allows a user to dislike another user, and adjust the weight for the chosen attribute (to make recommendation) by 0.9.
+    + `update_weight()`: Adjusts the weight of the chosen attribute.
+    + `get_attribute_weights()`: Extract attribute weights.
+    + `assign_attribute_weights()`: Assign attribute weights.
 
 ### 2. `database.py`
 
@@ -219,6 +222,10 @@ User(1, user1, John, 25, Male, Toronto, ['Music', 'Sports', 'Movies'], [2, 4, 5,
 ```
 
 + Type `4` if the user wants to log out the current account.
+
+### Graphical User Interface (GUI)
+
+The usage of graphical user interface has some logics as the CLI is the same, but offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
 
 
 ## Acknowledgements
