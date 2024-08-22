@@ -8,10 +8,9 @@ Rotmantic is a dating application facing Rotman students. This project allows us
 + gui.py
 
 ## Table of Content
-1. About the Project
-2. Project Structure
-3. Usage
-4. Acknowledgements
+1. Project Structure
+2. Usage
+3. Acknowledgements
 
 ## Project Structure
 
@@ -38,6 +37,53 @@ This file defines the `User` class, which employs Object-Oriented Programming pr
 
 ### 2. `database.py`
 
+This file creates the database integration system, using the Python `SQLite` library. It provides essential operations (Create, Read, Update and Delete) to interact with the sqlite database. The main functions and their roles are as follows:
+
+- `create_connection()`:
+  - Creates a connection to the SQLite database
+
+- `create_tables()`:
+  - Creates the `users` table in the database if it does not already exist. The table includes the following columns:
+    - `user_id`: Primary key, auto-incremented for each user.
+    - `username`: The unique username associated with the user’s account.
+    - `password`: The user's password.
+    - `name`: The user's real name.
+    - `age`: The user's age.
+    - `gender`: The user's gender.
+    - `location`: The user's location.
+    - `interests`: A comma-separated string representing the user’s interests.
+    - `introduction`: A brief introduction or bio for the user.
+    - `liked_users`: A comma-separated string of user IDs that the user has liked.
+    - `disliked_users`: A comma-separated string of user IDs that the user has disliked.
+    - `matches`: A comma-separated string of user IDs that have mutually liked each other.
+    - `attribute_weights`: A JSON string storing the weights assigned to different user attributes for matching purposes.
+
+- `add_user(username, password, name, age, gender, location, interests, introduction)`:
+  - Inserts a new user into the `users` table with the provided information.
+  - Initializes the `attribute_weights` with default values for `age`, `gender`, `location`, `introduction`, and user-defined `interests`.
+
+- `get_user(username)`:
+  - Retrieves a user’s data from the database using their username. This function will be use in main.sign_in() to
+  validate user account and password.
+  - Returns the user’s data as a tuple.
+
+- `get_user_by_id(user_id)`:
+  - Retrieves a user's data from the database using their `user_id`.
+  - Reconstruct `attribute_weights` from its JSON string format to dictionary type.
+  - Returns the `User` object, or `None` if the user does not exist.
+
+- `get_all_users()`:
+  - Fetches all users from the `users` table.
+  - Converts each user’s data into a `User` object, including the reconstruction of `attribute_weights` from their JSON string format.
+  - Returns a list of `User` objects.
+
+- `delete_user(user_id)`:
+  - Removes a user from the `users` table by their `user_id`.
+  - Before deletion, the function updates the `liked_users`, `disliked_users`, and `matches` fields of other users to ensure consistency in the database.
+
+- `update_user(user)`:
+  - Updates an existing user's data in the database based on the current state of the `User` object provided as input.
+  - Ensures that `liked_users`, `disliked_users`, and `matches` are stored as comma-separated strings, and `attribute_weights` as a JSON string.
 
 ### 3. `main.py` 
 
@@ -51,6 +97,7 @@ This file defines our command line interface, it creates welcome menu, user menu
     +  If the user chooses "Start swiping", `start_swiping(current_user)` will be called. This function asks the user to choose "like, dislike, or skip" on the recommended user, and the `recommend(current_user, all_users)` function is called inside the `start_swiping(user)`. It selects one attribute by probability based on the weight of each attribute, picks up a list of users who have the same selected attribute as the current user, and randomly recommends a user from the list to the current user. If introduction is the selected attribute, the function `semantic_similarity(text1, text2)` willed be called to calculate the semantic similarity between two users' introductions. Similar introductions are matched based on the semantic similarity score. If the user likes the recommended user, the recommended user will be added into the liked_users list of the current user. Vice versa.
     + If the user chooses "Your Own Profiles",  `view_own_profile(user)` is called. This function prints the profile of the user and provides 3 options "Edit Profile", "Delete Profile", and "Go back" for the user. If the user chooses "Edit Profile", `edit_profile()` function is called to present the user current profile and modify the profile based on the user's input. 
     + If the user chooses "View matches", `view_matches(user)` is called. This function adds the mutual users to the match list and shows the matching result to the user
+
 
 ### 3. `gui.py` 
 This file defines the graphical user interface (GUI) for the Rotmantic app using the `Tkinter` library. It provides an intuitive interface for users to interact with the app. Below are the main components and their roles:
@@ -96,3 +143,7 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
 + Additional Features
     + Error Handling: The application includes error handling for invalid inputs, such as an incorrect date of birth format or an existing account during sign-up.
     + Popup Messages: Uses Tkinter's messagebox to display information, success, and error messages to the user.
+
+## Acknowledgements
+
+This project utilized ChatGPT-4 by OpenAI to assist in generating the initial structure and for debugging support. 
