@@ -102,7 +102,7 @@ This file defines our command line interface, it creates welcome menu, user menu
     + If the user chooses "View matches", `view_matches(user)` is called. This function adds the mutual users to the match list and shows the matching result to the user
 
 
-### 3. `gui.py` 
+### 4. `gui.py` 
 This file defines the graphical user interface (GUI) for the Rotmantic app using the `Tkinter` library. It provides an intuitive interface for users to interact with the app. Below are the main components and their roles:
 
 + `RotmanticApp` Class: The main class that manages the entire GUI application, handling user interactions and transitions between different screens.
@@ -146,6 +146,15 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
 + Additional Features
     + Error Handling: The application includes error handling for invalid inputs, such as an incorrect date of birth format or an existing account during sign-up.
     + Popup Messages: Uses Tkinter's messagebox to display information, success, and error messages to the user.
+
+### 5. `resetdata.py`* 
+
+This file is intended to provide some dummy users for testing purpose. It will delete the existing database (if exist) and reset the database. The key functions are provided below:
+
+  + clean_database(): Deletes the specified database file to reset the database.
+  + create_dummy_users(): Creates and inserts 10 dummy users into the database one by one.
+
+**Note:** that this file is not being called in any of the files (user.py, database.py, main.py and gui.py) listed above.
 
 ## Usage
 
