@@ -144,6 +144,24 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
     + Error Handling: The application includes error handling for invalid inputs, such as an incorrect date of birth format or an existing account during sign-up.
     + Popup Messages: Uses Tkinter's messagebox to display information, success, and error messages to the user.
 
+## Usage
+
+First, refer to `requirements.txt` to make sure all dependencies are correctly satisfied. The following contents describes the usage via Command Line Interface and Graphical User Interface:
+
+### Command Line Interface (CLI)
+
+1. Run the Application: navigate to the project directory in your Python IDE, and run the `main.py` file. The following command lines will show up in your terminal:
+
+```python
+welcome to tinderlink!
+1.Sign In
+2.Sign Up
+3.Exit
+Please choose an option:
+```
+
+
+
 ## Acknowledgements
 
 This project utilized ChatGPT-4 by OpenAI to assist in generating the initial structure and for debugging support. 
