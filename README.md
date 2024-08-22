@@ -175,7 +175,7 @@ Welcome John,
 Please select what to do: 
 ```
 
-+ Type `1` to start swiping mode, a recommended user profile will be prompt out. The user can either mark the recommended user profile as "like/dislike", and the action will be count into the matching algorithm. The more user swipes, the more personalized recommendation will be. Once the user is tired of swiping, type 'exit' to end the swiping mode. See following the example of usage:
++ Type `1` to start swiping mode, a recommended user profile will prompt out. The user can either mark the recommended user profile as "like/dislike", and the action will be counted into the matching algorithm. The more user swipes, the more personalized recommendation will be. Once the user is tired of swiping, type 'exit' to end the swiping mode. See following the example of usage:
 
 ```
 Welcome Jane,
@@ -190,7 +190,7 @@ Recommended User: User(5, user5, Chris, 27, Male, New York, ['Sports', 'Travelin
 Do you like this user? (yes/no/exit): yes
 ```
 
-+ Type `2` to view user's own profile, and the user can edit/delete profile, or go back to the user menu. In the edition mode, the original content is preserved in brackets to allow user review. Note that the program only allow user to edit `name, gender, location, interest, and introduction`. Leaves the line blank and hit `enter` if no changes are going to made. 
++ Type `2` to view user's own profile, and the user can edit/delete profile, or go back to the user menu. In the edition mode, the original contents are preserved in brackets for review. Note that the program only allows user to edit `name, gender, location, interest, and introduction`. Leave the line blank and hit `enter` if no changes are going to made. 
 
 ```
 Options:
