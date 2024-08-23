@@ -207,12 +207,12 @@ def start_swiping(current_user):
             current_user.like(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
             all_users.remove(recommended_user[0])  
-            print(current_user.get_attribute_weights())
+            # print(current_user.get_attribute_weights())
         elif action == "no":
             current_user.dislike(recommended_user[0], recommended_user[1])
             database.update_user(current_user)
             all_users.remove(recommended_user[0]) 
-            print(current_user.get_attribute_weights())
+            # print(current_user.get_attribute_weights())
         elif action == "exit":
             break
         else:

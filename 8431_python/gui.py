@@ -125,6 +125,12 @@ class RotmanticApp:
         password = self.password_entry.get()
         name = self.name_entry.get()
 
+        # Check if the account already exists
+        existing_user = database.get_user(account)
+        if existing_user:
+            messagebox.showerror("Error", "Account already exists, please sign in.")
+            return
+
         # Validate the date of birth
         try:
             dob = datetime.strptime(self.dob_entry.get(), "%Y-%m-%d")
