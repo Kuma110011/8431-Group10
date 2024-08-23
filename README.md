@@ -158,83 +158,15 @@ This file is intended to provide some dummy users for testing purpose. It will d
 
 ## Usage
 
-First, refer to `requirements.txt` to make sure all dependencies are correctly satisfied. The following contents describes the usage via Command Line Interface and Graphical User Interface:
+First, refer to `requirements.txt` to make sure all dependencies are correctly satisfied. The following contents describes the usage via Command Line Interface (run the `main.py` file) and Graphical User Interface (run the `gui.py` file):
 
 ### Command Line Interface (CLI)
 
-1. Run the Application: navigate to the project directory in your Python IDE, and run the `main.py` file. The following command lines will show up in your terminal:
-
-```
-welcome to Rotmantic!
-1.Sign In
-2.Sign Up
-3.Exit
-Please choose an option:
-```
-+ Type `1` if you want to sign in, type `2` if you want to sign up for your account, type `3` to exit and end the program.
-
-2. User Menu Interaction: Once sign in, user has 4 interaction options: swiping, view profiles, view matches, and log out. See the following example for User Menu:
-
-```
-Welcome John,
-1. Start swiping
-2. Your Own Profiles
-3. View matches
-4. Log out
-Please select what to do: 
-```
-
-+ Type `1` to start swiping mode, a recommended user profile will prompt out. The user can either mark the recommended user profile as "like/dislike", and the action will be counted into the matching algorithm. The more user swipes, the more personalized recommendation will be. Once the user is tired of swiping, type 'exit' to end the swiping mode. See following the example of usage:
-
-```
-Welcome Jane,
-1. Start swiping
-2. Your Own Profiles
-3. View matches
-4. Log out
-Please select what to do: 
-1
-
-Recommended User: User(5, user5, Chris, 27, Male, New York, ['Sports', 'Traveling', 'Gaming'], [], [], [])
-Do you like this user? (yes/no/exit): yes
-```
-
-+ Type `2` to view user's own profile, and the user can edit/delete profile, or go back to the user menu. In the edition mode, the original contents are preserved in brackets for review. Note that the program only allows user to edit `name, gender, location, interest, and introduction`. Leave the line blank and hit `enter` if no changes are going to made. 
-
-```
-Options:
-1. Edit Profile
-2. Delete Profile
-3. Go Back
-Choose an option: 1
-
-Edit Profile
-Name (Jane): 
-Gender (Female): 
-Location (New York): 
-Interests (): 
-introduction (Hi, I am Jane. I love Reading, Traveling, Cooking.): 
-```
-
-+ Type `3` to view matches, this will show up recommended user profiles in the terminal by order (most recommend to lest recommend), if there exists recommend users. See below the example usage:
-
-```
-Welcome Jane,
-1. Start swiping
-2. Your Own Profiles
-3. View matches
-4. Log out
-Please select what to do: 
-3
-Your matches:
-User(1, user1, John, 25, Male, Toronto, ['Music', 'Sports', 'Movies'], [2, 4, 5, 10, 3], [8, 7, 6], [])
-```
-
-+ Type `4` if the user wants to log out the current account.
+Command Line Interface is our first iteration of the application. It is used as a benchmark to internal workflow. The final product is our GUI.
 
 ### Graphical User Interface (GUI)
 
-The usage of graphical user interface has the same logics as the CLI, but it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
+The graphical user interface is our final product and we recommend users to run `gui.py` instead of `main.py` as  it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
 
 ### **NOTE**
 
