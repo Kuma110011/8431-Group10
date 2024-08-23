@@ -166,7 +166,13 @@ Command Line Interface is our first iteration of the application. It is used as 
 
 ### Graphical User Interface (GUI)
 
-The graphical user interface is our final product and we recommend users to run `gui.py` instead of `main.py` as  it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the gui.py file. This will prompt out the Rotmantic Application Window, and the user can interact with the app in a similar way as described above in the CLI section. The user can also refer to the presentation slides (p.5 - p.6) for features preview.
+The graphical user interface is our final product and we recommend users to run `gui.py` instead of `main.py` as it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the `gui.py` file. This will prompt out the Rotmantic Application Window, and the user can interact with the app. See following illustration for features preview:
+
++ Sign in/Sing up Window: 
+![Illustration 1](images/illustration1.png)
+
++ Interactions:
+![Illustration 1](images/illustration2.png)
 
 ### **NOTE**
 

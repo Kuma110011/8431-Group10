@@ -19,7 +19,7 @@ class RotmanticApp:
         self.root.geometry("400x800")
         self.user = None
         self.skipped_users = []  # Track skipped users during the current session
-        self.logo = PhotoImage(file="logo_rotmantic.png")
+        self.logo = PhotoImage(file="images/logo_rotmantic.png")
         self.create_login_screen()
 
     def clear_screen(self):
