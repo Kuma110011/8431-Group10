@@ -1,16 +1,38 @@
 # Romantic Matching App
 
 
-Rotmantic is a dating application facing Rotman students. This project allows users to create accounts, swiping to find other interesting user, interact with other users (e.g., like, dislike), and view matches. It also allows users to edit and delete their account profile. The application includes both a command-line interface (CLI) and a graphical user interface (GUI) for user interaction. The project is structured with four main Python files:
+Rotmantic is a dating application facing Rotman students. This project allows users to create accounts, swipe to find other interesting user, interact with other users (e.g., like, dislike), and view matches. It also allows users to edit and delete their account profile. The application includes both a command-line interface (CLI) and a graphical user interface (GUI) for user interaction. The project is structured with four main Python files:
 + user.py
 + database.py
 + main.py
 + gui.py
 
 ## Table of Content
-1. Project Structure
-2. Usage
+1. Usage 
+2. Project Structure
 3. Acknowledgements
+
+
+## Usage
+
+First, refer to `requirements.txt` to make sure all dependencies are correctly satisfied. The following contents describes the usage via Command Line Interface (run the `main.py` file) and Graphical User Interface (run the `gui.py` file):
+
+### Command Line Interface (CLI)
+
+Command Line Interface is the initial iteration of the application and serves primarily to establish the internal workflow structure. The CLI can be run through `main.py` and the final application can be run through `gui.py`. 
+
+### Graphical User Interface (GUI)
+
+The graphical user interface is the finalize application. We recommend users to run `gui.py` instead of `main.py` as it offers more convenient user interactions. To use GUI version, run the `gui.py` file. This will prompt out the Rotmantic Application Window, and the user can interact with the app. See following illustration for features preview:
+
++ Sign in/Sign up Window: 
+![Illustration 1](images/illustration1.png)
+
++ Interactions:
+![Illustration 1](images/illustration2.png)
+
+**NOTE:** For developer who wants to test the program, run `resetdata.py` first to delete existing users in database and generate a clean 10 dummy users.
+
 
 ## Project Structure
 
@@ -90,15 +112,19 @@ This file creates the database integration system, using the Python `SQLite` lib
 
 ### 3. `main.py` 
 
-This file defines our command line interface, it creates welcome menu, user menu, allows user to swipe, edit and delete its profile, and view matches. The main functions and their roles are as follows:
+This file defines our command line interface, it creates welcome menu, user menu, allows user to swipe, edit and delete its profile, and view matches. The file represents the initial iteration of the application and serves primarily to establish the workflow structure for our GUI. 
+
+The `recommend()` function is a key component of our matching algorithm. This function operates by probabilistically selecting one attribute, weighted by the importance of each attribute. It then identifies a list of users who share the selected attribute with the current user and randomly recommends one user from this list. Additionally, the function ensures that the recommended users are within a 5-year age difference from the current user. If introduction is the selected attribute, the function `semantic_similarity(text1, text2)` willed be called to calculate the semantic similarity between two users' introductions. Similar introductions are matched based on the semantic similarity score.
+
+Other than that, `main.py` has other functions that builds the command line interface:
 
 + `welcome()`: Displays the welcome message and the main menu options: Sign In, Sign Up, and Exit.
-+ `sign_up()`: a function that asks user to input the basic information(account, password, name, age, gender, location, interest, introduction) to create a new profile and ensures the user is not an existing user. After registration, the program prompts the current user to sign in.
++ `sign_up()`: a function that asks user to input the basic information to create a new profile
 + `sign_in()`: Ask users to enter their account and password, if validate, returns a User object for the current user.
 + `main()`: The main loop of the program that displays the user menu and navigate between sign-up, sign-in, and exit options.
 + `user_menu()`: When signing in successfully, the function user_menu will be called to print out 4 options "Start swiping", "Your Own Profiles", "View matches", and "Log out" for the user to choose. 
-    +  If the user chooses "Start swiping", `start_swiping(current_user)` will be called. This function asks the user to choose "like, dislike, or skip" on the recommended user, and the `recommend(current_user, all_users)` function is called inside the `start_swiping(user)`. It selects one attribute by probability based on the weight of each attribute, picks up a list of users who have the same selected attribute as the current user, and randomly recommends a user from the list to the current user. If introduction is the selected attribute, the function `semantic_similarity(text1, text2)` willed be called to calculate the semantic similarity between two users' introductions. Similar introductions are matched based on the semantic similarity score. If the user likes the recommended user, the recommended user will be added into the liked_users list of the current user. Vice versa.
-    + If the user chooses "Your Own Profiles",  `view_own_profile(user)` is called. This function prints the profile of the user and provides 3 options "Edit Profile", "Delete Profile", and "Go back" for the user. If the user chooses "Edit Profile", `edit_profile()` function is called to present the user current profile and modify the profile based on the user's input. 
+    +  If the user chooses "Start swiping", `start_swiping(current_user)` will be called. This function asks the user to choose "like, dislike, or skip" on the recommended user, and the `recommend(current_user, all_users)` function is called inside the `start_swiping(user)`.
+    + If the user chooses "Your Own Profiles",  `view_own_profile(user)` is called. This function prints the profile of the user and provides 3 options "Edit Profile", "Delete Profile", and "Go back" for the user.
     + If the user chooses "View matches", `view_matches(user)` will be called. This function adds the mutual users to the match list and shows the matching result to the user
 
 
@@ -115,7 +141,7 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
 
     + `login()`: Validates user credentials against the database. If valid, it proceeds to the user menu; otherwise, it displays an error message.
 
-    + `sign_up()`: Handles the user registration process, including input validation, and stores the new user in the database.
+    + `sign_up()`: Handles the user registration process, including input validation, and stores the new user in the database. It features built-in error handling to ensure that users enter a valid date of birth, do not choose an existing username, and must select both a gender and an interest.
 
     + `create_user_menu()`: Displays the user menu after successful login, offering options to start swiping, view profile, view matches, or log out.
 
@@ -123,13 +149,13 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
 
     + `show_next_user_swiping()`: Displays the next user profile for swiping and handles user actions such as like, dislike, or skip.
 
-    + `skip_user_and_continue()`: Allows users to skip a profile without making a decision, and proceed to the next profile.
+    + `skip_user_and_continue()`: Allows users to skip a profile without making a decision, and proceed to the next profile. That skipped user may still appear in the swiping feature unlike the function `dislike_user()`
 
     + `view_profile()`: Allows the user to view their profile information, including personal details, interests, and introduction.
 
-    + `edit_profile()`: Enables users to modify their profile information, including name, location, interests, and introduction.
+    + `edit_profile()`: Enables users to modify their profile information, including name, location, interests, and introduction. Does not allow user to modify age nor gender.
 
-    + `delete_profile()`: Provides the option to delete the user's profile permanently after confirmation.
+    + `delete_profile()`: Provides the option to delete the user's profile permanently after confirmation. The profile will be deleted from the `matching_app.db`
 
     + `view_matches()`: Displays a list of all users who have mutually liked each other, and allows the user to view detailed profiles of their matches.
 
@@ -143,10 +169,6 @@ This file defines the graphical user interface (GUI) for the Rotmantic app using
 
 + `clear_screen()` and `clear_swipe_window()`: Utility functions to clear the current screen or swiping window before displaying new content.
 
-+ Additional Features
-    + Error Handling: The application includes error handling for invalid inputs, such as an incorrect date of birth format or an existing account during sign-up.
-    + Popup Messages: Uses Tkinter's messagebox to display information, success, and error messages to the user.
-
 ### 5. `resetdata.py`* 
 
 This file is intended to provide some dummy users for testing purpose. It will delete the existing database (if exist) and reset the database. The key functions are provided below:
@@ -156,25 +178,6 @@ This file is intended to provide some dummy users for testing purpose. It will d
 
 **Note:** that this file is not being called in any of the files (user.py, database.py, main.py and gui.py) listed above.
 
-## Usage
-
-First, refer to `requirements.txt` to make sure all dependencies are correctly satisfied. The following contents describes the usage via Command Line Interface (run the `main.py` file) and Graphical User Interface (run the `gui.py` file):
-
-### Command Line Interface (CLI)
-
-Command Line Interface is our first iteration of the application. It is used as a benchmark to internal workflow. The final product is our GUI.
-
-### Graphical User Interface (GUI)
-
-The graphical user interface is our final product and we recommend users to run `gui.py` instead of `main.py` as it offers more convenient user interactions. To use GUI version, navigate to the project directory in your Python IDE, and run the `gui.py` file. This will prompt out the Rotmantic Application Window, and the user can interact with the app. See following illustration for features preview:
-
-+ Sign in/Sign up Window: 
-![Illustration 1](images/illustration1.png)
-
-+ Interactions:
-![Illustration 1](images/illustration2.png)
-
-**NOTE:** For developer who wants to test the program, run `resetdata.py` first to generate 10 dummy users.
 
 
 ## Acknowledgements
