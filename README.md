@@ -1,7 +1,10 @@
 # Romantic Matching App
 
 
-Rotmantic is a dating application facing Rotman students. This project allows users to create accounts, swipe to find other interesting user, interact with other users (e.g., like, dislike), and view matches. It also allows users to edit and delete their account profile. The application includes both a command-line interface (CLI) and a graphical user interface (GUI) for user interaction. The project is structured with four main Python files:
+Rotmantic is a dating application (tinder-like) made using Python. The project cover essential programming concepts
+including data structures, object-oriented programming (OOP), vectorization techniques, database integration, and graphical UI. 
+
+This project allows users to create accounts, swipe to find other interesting user, interact with other users (e.g., like, dislike), and view matches. It also allows users to edit and delete their account profile. The application includes both a command-line interface (CLI) and a graphical user interface (GUI) for user interaction. The project is structured with four main Python files:
 + user.py
 + database.py
 + main.py
